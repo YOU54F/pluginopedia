@@ -1,0 +1,55 @@
+2022-12-12 08:03:28,109:INFO:STDOUT:Test to standard out
+2022-12-12 08:03:28,109:ERROR:STDERR:Traceback (most recent call last):
+2022-12-12 08:03:28,109:ERROR:STDERR:  File "/Users/saf/dev/pact_plugin_templates/python-plugin-0.0.0/./server.py", line 43, in <module>
+2022-12-12 08:03:28,109:ERROR:STDERR:raise Exception('Test to standard error')
+2022-12-12 08:03:28,109:ERROR:STDERR:Exception
+2022-12-12 08:03:28,109:ERROR:STDERR::
+2022-12-12 08:03:28,109:ERROR:STDERR:Test to standard error
+2022-12-12 08:03:28,109:ERROR:STDERR:Exception ignored in:
+2022-12-12 08:03:28,109:ERROR:STDERR:<__main__.StreamToLogger object at 0x103577f40>
+2022-12-12 08:03:28,109:ERROR:STDERR:AttributeError
+2022-12-12 08:03:28,109:ERROR:STDERR::
+2022-12-12 08:03:28,109:ERROR:STDERR:'StreamToLogger' object has no attribute 'flush'
+2022-12-12 08:03:28,109:ERROR:STDERR:Exception ignored in sys.unraisablehook
+2022-12-12 08:03:28,109:ERROR:STDERR::
+2022-12-12 08:03:28,109:ERROR:STDERR:<built-in function unraisablehook>
+2022-12-12 08:03:28,109:ERROR:STDERR:AttributeError
+2022-12-12 08:03:28,110:ERROR:STDERR::
+2022-12-12 08:03:28,110:ERROR:STDERR:'StreamToLogger' object has no attribute 'flush'
+2022-12-12 08:03:49,672:INFO:STDOUT:Test to standard out
+2022-12-12 08:03:49,672:INFO:STDOUT:{"port": 50051, "serverKey": "3511862a-5854-4540-848e-0ea2316164de"}
+2022-12-12 08:03:49,672:INFO:STDOUT:{"port": 50051, "serverKey": "3511862a-5854-4540-848e-0ea2316164de"}
+2022-12-12 08:03:49,672:INFO:STDOUT:{"port": 50051, "serverKey": "3511862a-5854-4540-848e-0ea2316164de"}
+2022-12-12 08:03:49,672:ERROR:STDERR:{"port": 50051, "serverKey": "3511862a-5854-4540-848e-0ea2316164de"}
+2022-12-12 08:04:18,378:ERROR:STDERR:Traceback (most recent call last):
+2022-12-12 08:04:18,378:ERROR:STDERR:  File "/Users/saf/dev/pact_plugin_templates/python-plugin-0.0.0/./server.py", line 74, in <module>
+2022-12-12 08:04:18,379:ERROR:STDERR:serve()
+2022-12-12 08:04:18,379:ERROR:STDERR:  File "/Users/saf/dev/pact_plugin_templates/python-plugin-0.0.0/./server.py", line 70, in serve
+2022-12-12 08:04:18,379:ERROR:STDERR:server.wait_for_termination()
+2022-12-12 08:04:18,379:ERROR:STDERR:  File "/Users/saf/.pyenv/versions/3.10.6/lib/python3.10/site-packages/grpc/_server.py", line 985, in wait_for_termination
+2022-12-12 08:04:18,381:ERROR:STDERR:return _common.wait(self._state.termination_event.wait,
+2022-12-12 08:04:18,381:ERROR:STDERR:  File "/Users/saf/.pyenv/versions/3.10.6/lib/python3.10/site-packages/grpc/_common.py", line 141, in wait
+2022-12-12 08:04:18,382:ERROR:STDERR:_wait_once(wait_fn, MAXIMUM_WAIT_TIMEOUT, spin_cb)
+2022-12-12 08:04:18,382:ERROR:STDERR:  File "/Users/saf/.pyenv/versions/3.10.6/lib/python3.10/site-packages/grpc/_common.py", line 106, in _wait_once
+2022-12-12 08:04:18,382:ERROR:STDERR:wait_fn(timeout=timeout)
+2022-12-12 08:04:18,382:ERROR:STDERR:  File "/Users/saf/.pyenv/versions/3.10.6/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/threading.py", line 607, in wait
+2022-12-12 08:04:18,383:ERROR:STDERR:signaled = self._cond.wait(timeout)
+2022-12-12 08:04:18,383:ERROR:STDERR:  File "/Users/saf/.pyenv/versions/3.10.6/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/threading.py", line 324, in wait
+2022-12-12 08:04:18,383:ERROR:STDERR:gotit = waiter.acquire(True, timeout)
+2022-12-12 08:04:18,383:ERROR:STDERR:KeyboardInterrupt
+2022-12-12 08:04:18,384:ERROR:STDERR:Exception ignored in:
+2022-12-12 08:04:18,384:ERROR:STDERR:<__main__.StreamToLogger object at 0x1016d1210>
+2022-12-12 08:04:18,384:ERROR:STDERR:AttributeError
+2022-12-12 08:04:18,384:ERROR:STDERR::
+2022-12-12 08:04:18,384:ERROR:STDERR:'StreamToLogger' object has no attribute 'flush'
+2022-12-12 08:04:18,384:ERROR:STDERR:Exception ignored in sys.unraisablehook
+2022-12-12 08:04:18,384:ERROR:STDERR::
+2022-12-12 08:04:18,384:ERROR:STDERR:<built-in function unraisablehook>
+2022-12-12 08:04:18,384:ERROR:STDERR:AttributeError
+2022-12-12 08:04:18,384:ERROR:STDERR::
+2022-12-12 08:04:18,384:ERROR:STDERR:'StreamToLogger' object has no attribute 'flush'
+2022-12-12 08:04:28,630:INFO:STDOUT:Test to standard out
+2022-12-12 08:04:28,630:INFO:STDOUT:{"port": 50051, "serverKey": "3511862a-5854-4540-848e-0ea2316164de"}
+2022-12-12 08:04:28,630:INFO:STDOUT:{"port": 50051, "serverKey": "3511862a-5854-4540-848e-0ea2316164de"}
+2022-12-12 08:04:28,630:INFO:STDOUT:{"port": 50051, "serverKey": "3511862a-5854-4540-848e-0ea2316164de"}
+2022-12-12 08:04:28,630:ERROR:STDERR:{"port": 50051, "serverKey": "3511862a-5854-4540-848e-0ea2316164de"}

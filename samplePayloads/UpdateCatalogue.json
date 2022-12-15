@@ -1,0 +1,38 @@
+{
+    "catalogue": [
+      {
+        "type": 3,
+        "key": "v3-includes"
+      },
+      {
+        "type": 3,
+        "key": "v3-datetime"
+      }, 
+      {
+        "type": 3,
+        "key": "v3-time"
+      },
+      {
+        "type": 2,
+        "key": "http"
+      },
+      {
+        "type": 2,
+        "key": "https"
+      },
+      {
+        "type": 2,
+        "key": "matt"
+      },
+      {
+        "type": 1,
+        "key": "json",
+        "values": [
+          {
+            "key": "content-types",
+            "value":"application/.*json,application/json-rpc,application/jsonrequest"
+          }]
+      }
+    ]
+  }
+  

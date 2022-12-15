@@ -1,0 +1,73 @@
+{
+  "name": "grpc-proto-loader-example",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/badsyntax/grpc-js-types/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/badsyntax/grpc-js-types"
+  },
+  "scripts": {
+    "build": "npm run build:typescript",
+    "build:typescript": "tsc -p .",
+    "watch": "npm run build:typescript -- -w",
+    "build:proto": "proto-loader-gen-types --longs=String --enums=String --defaults --oneofs --grpcLib=@grpc/grpc-js --outDir=proto/ proto/*.proto",
+    "prewatch": "npm run build:proto",
+    "prebuild": "npm run build:proto",
+    "lint": "npm run lint:prettier && npm run lint:eslint",
+    "lint:prettier": "prettier --check \"**/*.{ts,js,json,svg,md,yml}\"",
+    "lint:eslint": "eslint . --ext .js,.ts",
+    "lint:fix": "npm run lint:fix:prettier && npm run lint:eslint -- --fix",
+    "lint:fix:prettier": "prettier --write '**/*.{ts,tsx,js,json,svg,md,yml}'",
+    "start:server": "node server",
+    "start:client": "node client"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.6.8",
+    "@grpc/proto-loader": "^0.7.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node12": "^1.0.11",
+    "@types/node": "^15.0.3",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "eslint": "^8.20.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.7.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4"
+  },
+  "eslintConfig": {
+    "ignorePatterns": [
+      "**/*.js",
+      "proto/**/*.ts"
+    ],
+    "env": {
+      "browser": false,
+      "es6": true,
+      "node": true
+    },
+    "parserOptions": {
+      "project": "./tsconfig.json",
+      "ecmaVersion": 2018,
+      "sourceType": "module"
+    },
+    "extends": [
+      "plugin:@typescript-eslint/recommended",
+      "plugin:prettier/recommended"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "tabWidth": 2,
+    "printWidth": 80,
+    "useTabs": false
+  }
+}

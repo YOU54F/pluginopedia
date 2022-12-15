@@ -1,0 +1,12 @@
+{
+  "pluginInterfaceVersion": 1,
+  "name": "node-template",
+  "version": "0.0.0",
+  "executableType": "exec",
+  "minimumRequiredVersion": null,
+  "entryPoint": "server.ts",
+  "entryPoints": {},
+  "args": null,
+  "dependencies": null,
+  "pluginConfig": {}
+}

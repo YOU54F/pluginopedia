@@ -1,0 +1,21 @@
+# Plugin Templates
+
+# pact-plugin-template-*
+# pact-*-plugin-template
+# pact-matt-plugin
+
+# Existing known plugins
+
+# scratchpad
+
+SCRATCHPAD.md
+scratchpad_*
+
+# Random stuff
+.DS_Store
+node_modules
+log
+logs
+
+# We will keep our pacts in the code base to demonstrate their output
+!pacts

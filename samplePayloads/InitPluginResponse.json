@@ -1,0 +1,14 @@
+{
+  "catalogue": [
+    {
+      "key": "matt",
+      "values": {
+        "content-types": "text/matt;application/matt"
+      }
+    },
+    {
+      "key": "matt",
+      "type": "TRANSPORT"
+    }
+  ]
+}

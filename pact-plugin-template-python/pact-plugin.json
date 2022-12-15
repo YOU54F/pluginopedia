@@ -1,0 +1,12 @@
+{
+  "pluginInterfaceVersion": 1,
+  "name": "python-template",
+  "version": "0.0.0",
+  "executableType": "exec",
+  "minimumRequiredVersion": null,
+  "entryPoint": "server.py",
+  "entryPoints": {},
+  "args": null,
+  "dependencies": null,
+  "pluginConfig": {}
+}

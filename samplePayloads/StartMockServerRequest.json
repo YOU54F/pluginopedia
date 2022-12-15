@@ -1,0 +1,6 @@
+{
+  "hostInterface": "127.0.0.1",
+  "port": 0,
+  "tls": false,
+  "pact": "{\"consumer\":{\"name\":\"myconsumer\"},\"interactions\":[{\"description\":\"a MATT message\",\"key\":\"daf974126abe44c0\",\"pending\":false,\"request\":{\"contents\":{\"content\":\"MATThellotcpMATT\",\"contentType\":\"application/matt\",\"contentTypeHint\":\"DEFAULT\",\"encoded\":false}},\"response\":[{\"contents\":{\"content\":\"MATTtcpworldMATT\",\"contentType\":\"application/matt\",\"contentTypeHint\":\"DEFAULT\",\"encoded\":false}}],\"transport\":\"matt\",\"type\":\"Synchronous/Messages\"}],\"metadata\":{\"pact-js\":{\"version\":\"10.3.0\"},\"pactRust\":{\"ffi\":\"0.3.15\",\"models\":\"1.0.1\"},\"pactSpecification\":{\"version\":\"4.0\"},\"plugins\":[{\"configuration\":{},\"name\":\"matt\",\"version\":\"0.0.4\"}]},\"provider\":{\"name\":\"myprovider\"}}"
+}

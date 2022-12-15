@@ -1,0 +1,4 @@
+dist
+*.gz
+.DS_Store
+pactPluginServer

@@ -1,0 +1,10 @@
+{
+    "manifestVersion": 1,
+    "pluginInterfaceVersion": 1,
+    "name": "ruby-template",
+    "version": "0.0.0",
+    "executableType": "exec",
+    "minimumRequiredVersion": "2.7.6",
+    "entryPoint": "bin/bundle",
+    "args":[ "exec", "ruby", "main.rb"]
+  }

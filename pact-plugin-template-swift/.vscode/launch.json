@@ -1,0 +1,40 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug pact-plugin-template-swift",
+            "program": "${workspaceFolder:pact-plugin-template-swift}/.build/debug/pact-plugin-template-swift",
+            "args": [],
+            "cwd": "${workspaceFolder:pact-plugin-template-swift}",
+            "preLaunchTask": "swift: Build Debug pact-plugin-template-swift"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Release pact-plugin-template-swift",
+            "program": "${workspaceFolder:pact-plugin-template-swift}/.build/release/pact-plugin-template-swift",
+            "args": [],
+            "cwd": "${workspaceFolder:pact-plugin-template-swift}",
+            "preLaunchTask": "swift: Build Release pact-plugin-template-swift"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug PactPlugin",
+            "program": "${workspaceFolder:pact-plugin-template-swift}/.build/debug/PactPlugin",
+            "args": [],
+            "cwd": "${workspaceFolder:pact-plugin-template-swift}",
+            "preLaunchTask": "swift: Build Debug PactPlugin"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Release PactPlugin",
+            "program": "${workspaceFolder:pact-plugin-template-swift}/.build/release/PactPlugin",
+            "args": [],
+            "cwd": "${workspaceFolder:pact-plugin-template-swift}",
+            "preLaunchTask": "swift: Build Release PactPlugin"
+        }
+    ]
+}

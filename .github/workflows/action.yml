@@ -1,0 +1,26 @@
+name: Build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  test:
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v3
+      - run: ls
+      - uses: dart-lang/setup-dart@v1.3
+      - run: dart pub get
+        working-directory: pact-plugin-template-dart
+      - run: make compile
+        working-directory: pact-plugin-template-dart
+      - run: ./test_plugins.sh

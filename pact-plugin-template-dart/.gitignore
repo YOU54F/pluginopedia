@@ -1,0 +1,15 @@
+# Files and directories created by pub.
+.dart_tool/
+.packages
+
+# Conventional directory for build output.
+build/
+dist/
+dart-template
+
+# log files
+pact-plugin.log
+
+# test files
+pacts
+.DS_Store

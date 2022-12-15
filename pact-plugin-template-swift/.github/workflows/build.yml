@@ -1,0 +1,43 @@
+name: Build
+
+on:
+  push:
+  workflow_dispatch:
+    inputs:
+      release_level:
+        description: 'version of release to bump'
+        required: true
+        type: choice
+        options:
+        - patch
+        - minor
+        - major
+
+  # pull_request:
+  #   branches:
+  #     - master
+  # push:
+  #   branches:
+  #     - master
+  # schedule:
+  #   - cron: 0 0 1 * 0
+
+jobs:
+  swiftpm:
+    name: SwiftPM - Swift ${{ matrix.swift-version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: ['macos-latest', 'ubuntu-latest', 'windows-latest']
+        swift-version: ['5.6', '2022-07-20-a']
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - uses: sushichop/gha-swift-env@V1
+        with:
+          swift-version: ${{ matrix.swift-version }}
+      - name: Build and test a Swift package
+        run: |
+          swift build -v -c release
+          swift test -v -Xswiftc -warnings-as-errors
+      - run: ls .build

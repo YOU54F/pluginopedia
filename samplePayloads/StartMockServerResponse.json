@@ -1,0 +1,8 @@
+{
+  "details": {
+    "key": "27b64424-1d90-4f4d-bf0c-947c7bd2b2e9",
+    "port": 59936,
+    "address": "tcp://127.0.0.1:59936"
+  },
+  "response": "details"
+}
