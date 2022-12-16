@@ -28,6 +28,9 @@ proto:
 setup_dart:
 	dart pub global activate protoc_plugin
 
+deps: setup_dart
+	dart pub get
+
 run_local:
 	./bin/$(APP_NAME)
 
@@ -44,7 +47,7 @@ compile_x_plat:
 	mkdir -p dist/osx/x86_64
 	mkdir -p dist/osx/aarch64
 
-compile: clean compile_x_plat
+compile: deps clean compile_x_plat
 	dart compile exe bin/$(APP_NAME) -o build/${PLATFORM}/${ARCH}/${PROJECT}
 	cp build/${PLATFORM}/${ARCH}/${PROJECT} ${PROJECT}
 

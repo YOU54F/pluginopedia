@@ -166,6 +166,10 @@ elif [[ $TARGET == "rust" || $1 == "rust" ]]; then
     PLUGIN_EXECUTABLE_DIR="pact-plugin-template-rust"
     PLUGIN_EXECUTABLE=target/release/pact-csv-plugin
     start_exe_and_test
+elif [[ $TARGET == "python" || $1 == "python" ]]; then
+    PLUGIN_EXECUTABLE_DIR="pact-plugin-template-python"
+    PLUGIN_EXECUTABLE=server.py
+    start_exe_and_test
 elif [[ $TARGET == "cpp" || $1 == "cpp" ]]; then
     echo "TODO"
 elif [[ $TARGET == "objc" || $1 == "objc" ]]; then

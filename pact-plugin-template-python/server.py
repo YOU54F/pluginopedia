@@ -2,13 +2,9 @@
 import sys
 import grpc
 from concurrent import futures
-import time
 import plugin.plugin_pb2_grpc as pb2_grpc
 import plugin.plugin_pb2 as pb2
 import json
-
-import logging
-import sys
 
 # raise Exception('Test to standard error')
 class PactPluginService(pb2_grpc.PactPluginServicer):
