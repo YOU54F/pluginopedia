@@ -75,7 +75,7 @@ const pactPluginServer: PactPluginHandlers = {
 };
 
 function getServer(): grpc.Server {
-  const packageDefinition = protoLoader.loadSync('./proto/plugin.proto');
+  const packageDefinition = protoLoader.loadSync('../plugin.proto');
   const proto = grpc.loadPackageDefinition(
     packageDefinition
   ) as unknown as ProtoGrpcType;

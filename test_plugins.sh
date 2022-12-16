@@ -1,5 +1,3 @@
-
-
 TestPlugin() {
     # Usaage TestPlugin <rpc method> <path to request json>
     METHOD=$1
@@ -90,22 +88,22 @@ TestPlugin() {
     evans cli call io.pact.plugin.PactPlugin.$METHOD --proto plugin.proto --host localhost -f $TEST_FILE --port $PORT
 }
 
-
-run_test_server () {
-    echo $PWD;\
-    echo "entering" $PACT_PLUGIN_DIR;\
-    cd $PACT_PLUGIN_DIR;\
-    echo "entering" $PLUGIN_EXECUTABLE_DIR;\
-    cd $PLUGIN_EXECUTABLE_DIR;\
-    echo "testing" $PLUGIN_EXECUTABLE;\
-    ./$PLUGIN_EXECUTABLE & _pid=$!;
-    sleep 3; \
-    LISTENING_PORT=$(lsof -aPi -p$_pid -Fn | grep -e n | cut -d ":" -f2); \
+run_test_server() {
+    echo $PWD
+    echo "entering" $PACT_PLUGIN_DIR
+    cd $PACT_PLUGIN_DIR
+    echo "entering" $PLUGIN_EXECUTABLE_DIR
+    cd $PLUGIN_EXECUTABLE_DIR
+    echo "testing" $PLUGIN_EXECUTABLE
+    ./$PLUGIN_EXECUTABLE &
+    _pid=$!
+    sleep 3
+    LISTENING_PORT=$(lsof -aPi -p$_pid -Fn | grep -e n | cut -d ":" -f2)
     PORT=${LISTENING_PORT:-PORT}
-    echo "LISTENING_PORT:$LISTENING_PORT";\
-    echo "PROJECT:$PLUGIN_EXECUTABLE";\
-    echo "PID:" $_pid;\
-    echo "PORT:" ${LISTENING_PORT:-PORT};\
+    echo "LISTENING_PORT:$LISTENING_PORT"
+    echo "PROJECT:$PLUGIN_EXECUTABLE"
+    echo "PID:" $_pid
+    echo "PORT:" ${LISTENING_PORT:-PORT}
     # echo '{"contentType":"application/matt","contentsConfig":{"request":{"body":"hello"}}}' | evans cli call io.pact.plugin.PactPlugin.ConfigureInteraction --proto ../plugin.proto --port ${1:-$LISTENING_PORT} --host localhost; \
     # killall $PLUGIN_EXECUTABLE
     echo "leaving" $PLUGIN_EXECUTABLE_DIR
@@ -113,16 +111,16 @@ run_test_server () {
     echo "entering" $PWD
 }
 
-start_exe_and_test () {
-run_test_server
-TestPlugin InitPlugin
-echo "LISTENING_PORT:$LISTENING_PORT";
-echo "PROJECT:$PLUGIN_EXECUTABLE";
-echo "PID:" $_pid;
-# Kill all the things
-# killall $PLUGIN_EXECUTABLE_NAME
-killall $PLUGIN_EXECUTABLE
-kill $_pid
+start_exe_and_test() {
+    run_test_server
+    TestPlugin InitPlugin
+    echo "LISTENING_PORT:$LISTENING_PORT"
+    echo "PROJECT:$PLUGIN_EXECUTABLE"
+    echo "PID:" $_pid
+    # Kill all the things
+    # killall $PLUGIN_EXECUTABLE_NAME
+    killall $PLUGIN_EXECUTABLE
+    kill $_pid
 }
 
 PORT=${PORT:-"50051"}
@@ -130,49 +128,55 @@ PACT_PLUGIN_DIR=${PACT_PLUGIN_DIR:-"~/.pact/plugins"}
 PLUGIN_EXECUTABLE=${PLUGIN_EXECUTABLE:-"PactPluginServer"}
 PLUGIN_EXECUTABLE_DIR=${PLUGIN_EXECUTABLE_DIR:-"pact-plugin-template-xyz"}
 
-
-
-
 # Testing - Good
 PACT_PLUGIN_DIR=$PWD
 
+if [[ $TARGET == "deno" || $1 == "deno" ]]; then
+    PLUGIN_EXECUTABLE_DIR="pact-plugin-template-deno" \
+        PLUGIN_EXECUTABLE=pactPluginServer \
+        start_exe_and_test
+elif [[ $TARGET == "dart" || $1 == "dart" ]]; then
+    PLUGIN_EXECUTABLE_DIR="pact-plugin-template-dart"
+    PLUGIN_EXECUTABLE=dart-template start_exe_and_test
+elif [[ $TARGET == "dotnet" || $1 == "dotnet" ]]; then
+    PLUGIN_EXECUTABLE_DIR="pact-plugin-template-dotnet"
+    PLUGIN_EXECUTABLE=GrpcPactPlugin
+    start_exe_and_test
+elif [[ $TARGET == "golang" || $1 == "golang" ]]; then
+    PLUGIN_EXECUTABLE_DIR="pact-plugin-template-golang"
+    PLUGIN_EXECUTABLE=build/foobar
+    start_exe_and_test
+elif [[ $TARGET == "swift" || $1 == "swift" ]]; then
+    PLUGIN_EXECUTABLE_DIR="pact-plugin-template-swift"
+    PLUGIN_EXECUTABLE=.build/debug/PactPlugin
+    start_exe_and_test
+elif [[ $TARGET == "ruby" || $1 == "ruby" ]]; then
+    PLUGIN_EXECUTABLE_DIR="pact-plugin-template-ruby"
+    PLUGIN_EXECUTABLE=main.rb
+    start_exe_and_test
+elif [[ $TARGET == "node" || $1 == "node" ]]; then
+    PLUGIN_EXECUTABLE_DIR="pact-plugin-template-node"
+    PLUGIN_EXECUTABLE=server.ts
+    start_exe_and_test
+elif [[ $TARGET == "kotlin" || $1 == "kotlin" ]]; then
+    PLUGIN_EXECUTABLE_DIR="pact-plugin-template-kotlin"
+    PLUGIN_EXECUTABLE=./build/install/pact-protobuf-plugin/bin/pact-protobuf-plugin
+    start_exe_and_test
+elif [[ $TARGET == "rust" || $1 == "rust" ]]; then
+    PLUGIN_EXECUTABLE_DIR="pact-plugin-template-rust"
+    PLUGIN_EXECUTABLE=target/release/pact-csv-plugin
+    start_exe_and_test
+elif [[ $TARGET == "cpp" || $1 == "cpp" ]]; then
+    echo "TODO"
+elif [[ $TARGET == "objc" || $1 == "objc" ]]; then
+    echo "TODO"
+else
+    echo "pass a project to test"
+fi
 
-PLUGIN_EXECUTABLE_DIR="pact-matt-plugin" 
-PLUGIN_EXECUTABLE=matt 
-start_exe_and_test
-
-
-# PLUGIN_EXECUTABLE_DIR="pact-plugin-template-dart" 
-# PLUGIN_EXECUTABLE=dart-template 
-# start_exe_and_test 50051
-
-# PLUGIN_EXECUTABLE_DIR="pact-plugin-template-golang" 
-# PLUGIN_EXECUTABLE=build/foobar 
-# start_exe_and_test 50051
-
-# PLUGIN_EXECUTABLE_DIR="pact-plugin-template-dotnet" 
-# PLUGIN_EXECUTABLE=GrpcPactPlugin
+# PLUGIN_EXECUTABLE_DIR="pact-matt-plugin"
+# PLUGIN_EXECUTABLE=matt
 # start_exe_and_test
-
-# PLUGIN_EXECUTABLE_DIR="pact-plugin-template-swift" 
-# PLUGIN_EXECUTABLE=.build/debug/PactPlugin
-# start_exe_and_test
-
-
-PLUGIN_EXECUTABLE_DIR="pact-plugin-template-ruby" 
-PLUGIN_EXECUTABLE=main.rb
-start_exe_and_test
-
-
-PLUGIN_EXECUTABLE_DIR="pact-plugin-template-node" 
-PLUGIN_EXECUTABLE=server.ts
-start_exe_and_test
-
-PLUGIN_EXECUTABLE_DIR="pact-plugin-template-deno" 
-PLUGIN_EXECUTABLE=pactPluginServer
-start_exe_and_test
-
-
 
 # TestPlugin InitPlugin <path_to_file>
 # TestPlugin InitPlugin

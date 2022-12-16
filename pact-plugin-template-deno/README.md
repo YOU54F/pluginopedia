@@ -11,7 +11,7 @@ A starter template for building a [Pact Plugin](https://github.com/pact-foundati
 Can be installed via the [pact-plugin-cli](https://github.com/pact-foundation/pact-plugins/tree/main/cli)
 
 ```sh
-pact-plugin-cli install -y https://github.com/YOU54F/pact-deno-plugin-template/releases/tag/v-0.0.0
+pact-plugin-cli install -y https://github.com/YOU54F/pact-plugin-template-deno/releases/tag/v-0.0.0
 ```
 
 Use it in your Pact tests with the `deno-template` plugin name.

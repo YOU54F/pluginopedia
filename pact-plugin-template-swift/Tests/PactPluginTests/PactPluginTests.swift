@@ -44,11 +44,11 @@ final class pact_plugin_template_swiftTests: XCTestCase {
         }
       }
       process.waitUntilExit()
-
+      let expectedPort = 50051
       let data = pipe.fileHandleForReading.readDataToEndOfFile()
       let output = String(data: data, encoding: .utf8)
       print("Output from PactPlugin: "+output!)
-      XCTAssertEqual(output, "server started on port 50051\n")
+      XCTAssertEqual(output, "{\"port\": \(expectedPort), \"serverKey\": \"foo-bar\"}\n")
 
     #endif
   }
