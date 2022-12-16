@@ -20,5 +20,10 @@ jobs:
       - run: ls
       - uses: dart-lang/setup-dart@v1.3
       - run: TARGET=dart make compile
-      - run: curl https://i.jpillora.com/ktr0731/evans@v0.10.9! | bash
+      # - run: curl https://i.jpillora.com/ktr0731/evans@v0.10.9! | bash
+      - name: Install evans
+        uses: jaxxstorm/action-install-gh-release@v1.9.0
+        with:
+          repo: ktr0731/evans
+          tag: v0.10.9
       - run: TARGET=dart make -i test
