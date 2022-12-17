@@ -101,10 +101,10 @@ TestPlugin() {
     echo "expecting $TEST_RESPONSE_FILE"
     expected_response=$(jq . "$TEST_RESPONSE_FILE")
     echo "$expected_response"
-    echo "evans cli call io.pact.plugin.PactPlugin."$METHOD" --proto plugin.proto --host localhost -f "$TEST_FILE" --port "$PORT""
+    echo "evans cli call io.pact.plugin.PactPlugin.$METHOD --proto plugin.proto --host localhost -f $TEST_FILE --port $PORT"
     response=$(evans cli call io.pact.plugin.PactPlugin."$METHOD" --proto plugin.proto --host localhost -f "$TEST_FILE" --port "$PORT")
     diff <(echo "$response" | jq . -c --sort-keys) <(cat "$TEST_RESPONSE_FILE" | jq -c . --sort-keys) || {
-        echo "mismatch occurred, actual response: " + $(echo "$response" | jq .) + "expected response: $(echo "$expected_response" | jq .)"
+        echo "mismatch occurred, actual response: " + "$(echo "$response" | jq .)" + "expected response: $(echo "$expected_response" | jq .)"
         export ERROR_FLAG=true
     }
 }
