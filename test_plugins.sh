@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 TestPlugin() {
     # Usaage TestPlugin <rpc method> <path to request json>
     METHOD=$1
@@ -84,18 +85,18 @@ TestPlugin() {
         ;;
     esac
     echo "sending $TEST_FILE"
-    jq . $TEST_FILE
-    evans cli call io.pact.plugin.PactPlugin.$METHOD --proto plugin.proto --host localhost -f $TEST_FILE --port $PORT
+    jq . "$TEST_FILE"
+    evans cli call io.pact.plugin.PactPlugin."$METHOD" --proto plugin.proto --host localhost -f "$TEST_FILE" --port "$PORT"
 }
 
 run_test_server() {
-    echo $PWD
-    echo "entering" $PACT_PLUGIN_DIR
-    cd $PACT_PLUGIN_DIR
-    echo "entering" $PLUGIN_EXECUTABLE_DIR
-    cd $PLUGIN_EXECUTABLE_DIR
-    echo "testing" $PLUGIN_EXECUTABLE
-    ./$PLUGIN_EXECUTABLE &
+    echo "$PWD"
+    echo "entering" "$PACT_PLUGIN_DIR"
+    cd "$PACT_PLUGIN_DIR" || exit
+    echo "entering" "$PLUGIN_EXECUTABLE_DIR"
+    cd "$PLUGIN_EXECUTABLE_DIR" || exit
+    echo "testing" "$PLUGIN_EXECUTABLE"
+    ./"$PLUGIN_EXECUTABLE" &
     _pid=$!
     sleep 3
     LISTENING_PORT=$(lsof -aPi -p$_pid -Fn | grep -e n | cut -d ":" -f2)
@@ -103,12 +104,12 @@ run_test_server() {
     echo "LISTENING_PORT:$LISTENING_PORT"
     echo "PROJECT:$PLUGIN_EXECUTABLE"
     echo "PID:" $_pid
-    echo "PORT:" ${LISTENING_PORT:-PORT}
+    echo "PORT:" "${LISTENING_PORT:-PORT}"
     # echo '{"contentType":"application/matt","contentsConfig":{"request":{"body":"hello"}}}' | evans cli call io.pact.plugin.PactPlugin.ConfigureInteraction --proto ../plugin.proto --port ${1:-$LISTENING_PORT} --host localhost; \
     # killall $PLUGIN_EXECUTABLE
-    echo "leaving" $PLUGIN_EXECUTABLE_DIR
-    cd $PACT_PLUGIN_DIR
-    echo "entering" $PWD
+    echo "leaving" "$PLUGIN_EXECUTABLE_DIR"
+    cd "$PACT_PLUGIN_DIR" || exit
+    echo "entering" "$PWD"
 }
 
 start_exe_and_test() {
@@ -131,7 +132,7 @@ start_exe_and_test() {
     echo "PID:" $_pid
     # Kill all the things
     # killall $PLUGIN_EXECUTABLE_NAME
-    killall $PLUGIN_EXECUTABLE
+    killall "$PLUGIN_EXECUTABLE"
     kill $_pid
 }
 
