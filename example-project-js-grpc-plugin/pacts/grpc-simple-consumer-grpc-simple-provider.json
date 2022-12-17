@@ -1,0 +1,94 @@
+{
+  "consumer": {
+    "name": "grpc-simple-consumer"
+  },
+  "interactions": [
+    {
+      "description": "a grpc message",
+      "interactionMarkup": {
+        "markup": "```protobuf\nmessage MessageOut {\n    bool out = 1;\n}\n```\n",
+        "markupType": "COMMON_MARK"
+      },
+      "key": "edbc9ec63699f73c",
+      "pending": false,
+      "pluginConfiguration": {
+        "protobuf": {
+          "descriptorKey": "7f75c6bd9dd0357f1c39fa2d42a1ddec",
+          "service": "Test/GetTest"
+        }
+      },
+      "request": {
+        "contents": {
+          "content": "CAE=",
+          "contentType": "application/protobuf;message=MessageIn",
+          "contentTypeHint": "BINARY",
+          "encoded": "base64"
+        },
+        "matchingRules": {
+          "body": {
+            "$.in": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "boolean"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "contents": {
+            "content": "CAE=",
+            "contentType": "application/protobuf;message=MessageOut",
+            "contentTypeHint": "BINARY",
+            "encoded": "base64"
+          },
+          "matchingRules": {
+            "body": {
+              "$.out": {
+                "combine": "AND",
+                "matchers": [
+                  {
+                    "match": "boolean"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "transport": "grpc",
+      "type": "Synchronous/Messages"
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "10.4.0"
+    },
+    "pactRust": {
+      "ffi": "0.3.15",
+      "mockserver": "0.9.6",
+      "models": "1.0.1"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    },
+    "plugins": [
+      {
+        "configuration": {
+          "7f75c6bd9dd0357f1c39fa2d42a1ddec": {
+            "protoDescriptors": "CoEBCgxzaW1wbGUucHJvdG8iGwoJTWVzc2FnZUluEg4KAmluGAEgASgIUgJpbiIeCgpNZXNzYWdlT3V0EhAKA291dBgBIAEoCFIDb3V0MiwKBFRlc3QSJAoHR2V0VGVzdBIKLk1lc3NhZ2VJbhoLLk1lc3NhZ2VPdXQiAGIGcHJvdG8z",
+            "protoFile": "syntax = \"proto3\";\n\nmessage MessageIn {\n  bool in = 1;\n}\n\nmessage MessageOut {\n  bool out = 1;\n}\n\nservice Test {\n  rpc GetTest(MessageIn) returns (MessageOut) {}\n}\n"
+          }
+        },
+        "name": "protobuf",
+        "version": "0.2.0"
+      }
+    ]
+  },
+  "provider": {
+    "name": "grpc-simple-provider"
+  }
+}
