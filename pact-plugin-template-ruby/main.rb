@@ -9,33 +9,7 @@ require 'plugin_services_pb'
 require 'json'
 require 'securerandom'
 require 'socket'
-
 require 'logger'
-
-# module Logging
-#   class << self
-#     def logger
-#       @logger ||= Logger.new($stdout)
-#     end
-
-#     attr_writer :logger
-#   end
-
-#   # Addition
-#   def self.included(base)
-#     class << base
-#       def logger
-#         Logging.logger
-#       end
-#     end
-#   end
-
-#   def logger
-#     Logging.logger
-#   end
-# end
-
-# require 'socket'
 
 class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
   # include Logging
@@ -67,8 +41,6 @@ class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
     puts "Received compare_contents_req: #{JSON.pretty_generate(compare_contents)}"
     actual = compare_contents[:actual][:content][:value]
     expected = compare_contents[:expected][:content][:value]
-    # actual := parseMattMessage(string(req.Actual.Content.Value))
-    # expected := parseMattMessage(string(req.Expected.Content.Value))
     if actual != expected
       mismatch = "expected body: #{expected} is not equal to actual body: #{actual}"
       puts "Mismatch found: #{mismatch}"
@@ -95,45 +67,28 @@ class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
   def configure_interaction(configure_interaction_req, _unused_call)
     print "Received configure_interaction_req: #{JSON.pretty_generate(configure_interaction_req.to_h)}"
     contents_config = configure_interaction_req.to_h
-    # print "Parsed contents_config: #{contents_config[:Request][:Body]}, #{contents_config["Response"]["Body"]}"
-    pp contents_config
+    puts contents_config[:contentsConfig][:fields]
+    interactions = []
 
-    # if contents_config[:fields][:request]
-    #   pp "got a rqeuest interaction"
-    #   response_body = 'MATThelloMATT'
-    #   return Io::Pact::Plugin::ConfigureInteractionResponse.new(interaction: [
-    #                                                               Io::Pact::Plugin::InteractionResponse.new(contents: {
-    #                                                                                                           contentType: 'application/matt',
-    #                                                                                                           content: Google::Protobuf::BytesValue.new(value: response_body)
-    #                                                                                                         })
-    #                                                             ])
-    # end
-    # if contents_config[:fields][:response]
-    #   pp "got a response interaction"
-    #   response_body = 'MATTworldMATT'
-    #   return Io::Pact::Plugin::ConfigureInteractionResponse.new(interaction: [
-    #                                                               Io::Pact::Plugin::InteractionResponse.new(contents: {
-    #                                                                                                           contentType: 'application/matt',
-    #                                                                                                           content: Google::Protobuf::BytesValue.new(value: response_body)
-    #                                                                                                         })
-    #                                                             ])
-    # end
-    # response_body = 'MATTworldMATT'
-    Io::Pact::Plugin::ConfigureInteractionResponse.new(interaction: [
-                                                         Io::Pact::Plugin::InteractionResponse.new(contents: {
-                                                                                                     contentType: 'application/matt',
-                                                                                                     content: Google::Protobuf::BytesValue.new(value: 'MATThelloMATT')
-                                                                                                   },
-                                                                                                   partName: 'request'),
-
-                                                         Io::Pact::Plugin::InteractionResponse.new(contents: {
-                                                                                                     contentType: 'application/matt',
-                                                                                                     content: Google::Protobuf::BytesValue.new(value: 'MATTworldMATT')
-                                                                                                   },
-                                                                                                   partName: 'response')
-
-                                                       ])
-    # Io::Pact::Plugin::ConfigureInteractionResponse.new(interaction: [])
+    if contents_config[:contentsConfig][:fields]['request']
+      pp 'got a request interaction'
+      puts contents_config[:contentsConfig][:fields][:request]
+      request_body = contents_config[:contentsConfig][:fields]['request'][:struct_value][:fields]['body'][:string_value]
+      interactions.push(Io::Pact::Plugin::InteractionResponse.new(contents: {
+                                                                    contentType: 'application/matt',
+                                                                    content: Google::Protobuf::BytesValue.new(value: 'MATT' + request_body + 'MATT')
+                                                                  }))
+    end
+    if contents_config[:contentsConfig][:fields]['response']
+      pp 'got a response interaction'
+      puts contents_config[:contentsConfig][:fields][:response]
+      response_body = contents_config[:contentsConfig][:fields]['response'][:struct_value][:fields]['body'][:string_value]
+      interactions.push(Io::Pact::Plugin::InteractionResponse.new(contents: {
+                                                                    contentType: 'application/matt',
+                                                                    content: Google::Protobuf::BytesValue.new(value: 'MATT' + response_body + 'MATT')
+                                                                  }))
+    end
+    Io::Pact::Plugin::ConfigureInteractionResponse.new(interaction: interactions)
   end
 
   # Request to generate the content using any defined generators
@@ -197,34 +152,25 @@ def main
   # server = TCPServer.new('127.0.0.1', 0)
   # port = server.addr[1]
   # server.close()
-  port = 50051
+  port = 50_051
   # pp port
   host = "0.0.0.0:#{port}"
   server_key = SecureRandom.uuid
   s = GRPC::RpcServer.new
   s.add_http2_port(host, :this_port_is_insecure)
-  # GRPC.logger.info("{\"port\": #{port}, \"serverKey\": \"#{server_key}\"}")
-  # $stdout << JSON.dump({"port": port.to_i, "serverKey": "#{server_key}"})
-  s.handle(PactRubyPluginServer)
-  
-  # # s.run_till_terminated_or_interrupted([1, 'int', 'SIGTERM'])
-  # if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RbConfig::CONFIG['arch']) != nil
 
-  #   s.run_till_terminated
-  # else
-  #   s.run_till_terminated_or_interrupted([1, 'int', 'SIGTERM'])
-    
-  #   # s.run_till_terminated_or_interrupted([1, 'int', 'SIGTERM'])
-  #   # s.loop_handle_server_calls
-  # end
+  s.handle(PactRubyPluginServer)
 
   begin
     $stdout.puts("{\"port\": #{port}, \"serverKey\": \"#{server_key}\"}\n")
-    s.run_till_terminated_or_interrupted([1, 'int', 'SIGQUIT'])
+    if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RbConfig::CONFIG['arch']) != nil
 
-    # s.loop_handle_server_calls
-  rescue => e
-    puts "Note: You will typically use Signal.trap instead."
+      s.run_till_terminated
+    else
+      s.run_till_terminated_or_interrupted([1, 'int', 'SIGINT', 'SIGTERM'])
+    end
+  rescue StandardError => e
+    puts e
   end
 end
 
