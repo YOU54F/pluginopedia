@@ -15,15 +15,242 @@ jobs:
     defaults:
       run:
         shell: bash
+    env:
+      TARGET: dart
     steps:
       - uses: actions/checkout@v3
       - run: ls
       - uses: dart-lang/setup-dart@v1.3
-      - run: TARGET=dart make compile
-      # - run: curl https://i.jpillora.com/ktr0731/evans@v0.10.9! | bash
+      - run: make compile
       - name: Install evans
         uses: jaxxstorm/action-install-gh-release@v1.9.0
         with:
           repo: ktr0731/evans
           tag: v0.10.9
-      - run: TARGET=dart make -i test
+      - run: make -i test
+  deno:
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      TARGET: deno
+    steps:
+      - uses: actions/checkout@v3
+      - run: ls
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+      - run: make compile
+      - name: Install evans
+        uses: jaxxstorm/action-install-gh-release@v1.9.0
+        with:
+          repo: ktr0731/evans
+          tag: v0.10.9
+      - run: make -i test
+  dotnet:
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      TARGET: dotnet
+    steps:
+      - uses: actions/checkout@v3
+      - run: ls
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+      - run: make compile
+      - name: Install evans
+        uses: jaxxstorm/action-install-gh-release@v1.9.0
+        with:
+          repo: ktr0731/evans
+          tag: v0.10.9
+      - run: make -i test
+  golang:
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      TARGET: golang
+    steps:
+      - uses: actions/checkout@v3
+      - run: ls
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.17.0'
+      - run: make compile
+      - name: Install evans
+        uses: jaxxstorm/action-install-gh-release@v1.9.0
+        with:
+          repo: ktr0731/evans
+          tag: v0.10.9
+      - run: make -i test
+  kotlin:
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      TARGET: kotlin
+    steps:
+      - uses: actions/checkout@v3
+      - run: ls
+      - uses: fwilhe2/setup-kotlin@main
+      - run: make compile
+      - name: Install evans
+        uses: jaxxstorm/action-install-gh-release@v1.9.0
+        with:
+          repo: ktr0731/evans
+          tag: v0.10.9
+      - run: make -i test
+  node:
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      TARGET: node
+    steps:
+      - uses: actions/checkout@v3
+      - run: ls
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: make compile
+      - name: Install evans
+        uses: jaxxstorm/action-install-gh-release@v1.9.0
+        with:
+          repo: ktr0731/evans
+          tag: v0.10.9
+      - run: make -i test
+  python:
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      TARGET: python
+    steps:
+      - uses: actions/checkout@v3
+      - run: ls
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' 
+      - run: make compile
+      - name: Install evans
+        uses: jaxxstorm/action-install-gh-release@v1.9.0
+        with:
+          repo: ktr0731/evans
+          tag: v0.10.9
+      - run: make -i test
+  ruby:
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      TARGET: ruby
+    steps:
+      - uses: actions/checkout@v3
+      - run: ls
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "2.7.6"
+      - run: make compile
+      - name: Install evans
+        uses: jaxxstorm/action-install-gh-release@v1.9.0
+        with:
+          repo: ktr0731/evans
+          tag: v0.10.9
+      - run: make -i test
+  rust:
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      TARGET: rust
+    steps:
+      - uses: actions/checkout@v3
+      - run: ls
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - run: make compile
+      - name: Install evans
+        uses: jaxxstorm/action-install-gh-release@v1.9.0
+        with:
+          repo: ktr0731/evans
+          tag: v0.10.9
+      - run: make -i test
+  swift:
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    env:
+      TARGET: swift
+    steps:
+      - uses: actions/checkout@v3
+      - run: ls
+      - uses: compnerd/gha-setup-swift@main
+        if: runner.os == 'Windows'
+        with:
+          branch: swift-5.7.1-release
+          tag: 5.7.1-RELEASE
+      - run: make compile
+      - name: Install evans
+        uses: jaxxstorm/action-install-gh-release@v1.9.0
+        with:
+          repo: ktr0731/evans
+          tag: v0.10.9
+      - run: make -i test
