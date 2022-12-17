@@ -1,0 +1,14 @@
+{
+  "expected": {
+    "contentType": "application/matt",
+    "content": "TUFUVGhlbGxvTUFUVA=="
+  },
+  "actual": {
+    "contentType": "application/matt",
+    "content": "TUFUVGhlbGxvTUFUVA=="
+  },
+  "pluginConfiguration": {
+    "interactionConfiguration": {},
+    "pactConfiguration": {}
+  }
+}

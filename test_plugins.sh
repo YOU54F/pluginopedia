@@ -6,17 +6,17 @@ TestPlugin() {
 
     InitPlugin)
         TEST_FILE=${TEST_FILE:-"samplePayloads/InitPluginRequest.json"}
-        echo "// Updated catalogue. This will be sent when the core catalogue has been updated (probably by a plugin loading)"
-        echo "rpc UpdateCatalogue(Catalogue) returns (google.protobuf.Empty);"
-        ;;
-    UpdateCatalogue)
-        TEST_FILE=${TEST_FILE:-"samplePayloads/UpdateCatalogue.json"}
         echo "// Check that the plugin loaded OK. Returns the catalogue entries describing what the plugin provides"
         echo "rpc InitPlugin(InitPluginRequest) returns (InitPluginResponse);"
         ;;
+    UpdateCatalogue)
+        TEST_FILE=${TEST_FILE:-"samplePayloads/UpdateCatalogue.json"}
+        echo "// Updated catalogue. This will be sent when the core catalogue has been updated (probably by a plugin loading)"
+        echo "rpc UpdateCatalogue(Catalogue) returns (google.protobuf.Empty);"
+        ;;
 
     CompareContents)
-        TEST_FILE=${TEST_FILE:-"samplePayloads/ConfigureInteractionRequest_MattRequest.json"}
+        TEST_FILE=${TEST_FILE:-"samplePayloads/CompareContentsRequest.json"}
         echo "// Request to perform a comparison of some contents (matching request)"
         echo "rpc CompareContents(CompareContentsRequest) returns (CompareContentsResponse);"
         ;;
@@ -114,6 +114,18 @@ run_test_server() {
 start_exe_and_test() {
     run_test_server
     TestPlugin InitPlugin
+    TestPlugin UpdateCatalogue
+    TestPlugin ConfigureInteraction samplePayloads/ConfigureInteractionRequest_MattRequest.json
+    TestPlugin ConfigureInteraction samplePayloads/ConfigureInteractionRequest_MattResponse.json
+    TestPlugin CompareContents
+    TestPlugin CompareContents samplePayloads/CompareContentsRequestFailing.json
+    # TestPlugin GenerateContent
+    # TestPlugin StartMockServer
+    # TestPlugin ShutdownMockServer
+    # TestPlugin GetMockServerResults
+    # TestPlugin PrepareInteractionForVerification
+    # TestPlugin VerifyInteraction
+
     echo "LISTENING_PORT:$LISTENING_PORT"
     echo "PROJECT:$PLUGIN_EXECUTABLE"
     echo "PID:" $_pid
