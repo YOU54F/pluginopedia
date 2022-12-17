@@ -1,0 +1,20 @@
+{
+    "error": "we had a mismatch",
+    "results": {
+      "$": {
+        "mismatches": [
+          {
+            "actual": "d29ybGQ=",
+            "diff": "diff",
+            "expected": "aGVsbG8=",
+            "mismatch": "mismatch",
+            "path": "$"
+          }
+        ]
+      }
+    },
+    "typeMismatch": {
+      "actual": "\n\u0005world",
+      "expected": "\n\u0005hello"
+    }
+  }

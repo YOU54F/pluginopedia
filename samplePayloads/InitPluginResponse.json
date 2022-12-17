@@ -5,10 +5,6 @@
       "values": {
         "content-types": "application/foo"
       }
-    },
-    {
-      "key": "foo",
-      "type": "TRANSPORT"
     }
   ]
 }

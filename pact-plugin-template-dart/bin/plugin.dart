@@ -17,7 +17,7 @@ class PactPluginServer extends PactPluginServiceBase {
     log('Received InitPluginRequest: $request');
     var response = InitPluginResponse();
     response.catalogue.add(CatalogueEntry(
-        key: 'matt',
+        key: 'foo',
         type: CatalogueEntry_EntryType.CONTENT_MATCHER,
         values: {
           'content-types': "application/foo",
@@ -57,7 +57,7 @@ class PactPluginServer extends PactPluginServiceBase {
             partName: "response",
             contents: Body(
                 contentType: "application/foo",
-                content: BytesValue(value: utf8.encode('responseBody')))),
+                content: BytesValue(value: utf8.encode('$responseBody')))),
       ]);
     }
     return ConfigureInteractionResponse();
@@ -75,11 +75,11 @@ class PactPluginServer extends PactPluginServiceBase {
     var response = CompareContentsResponse(
         error: "we had a mismatch",
         results: {
-          "ContentMismatches()": ContentMismatches(mismatches: [
+          "\$": ContentMismatches(mismatches: [
             ContentMismatch(
                 diff: "diff",
                 mismatch: 'mismatch',
-                path: "/path/to/mismatch",
+                path: "\$",
                 actual: request.actual.content,
                 expected: request.expected.content)
           ])

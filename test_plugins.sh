@@ -1,45 +1,53 @@
 #!/usr/bin/env bash
 TestPlugin() {
-    # Usaage TestPlugin <rpc method> <path to request json>
+    # Usaage TestPlugin <rpc method> <path to request json> <path to expected response json>
     METHOD=$1
     TEST_FILE=$2
+    TEST_RESPONSE_FILE=$3
     case $METHOD in
 
     InitPlugin)
         TEST_FILE=${TEST_FILE:-"samplePayloads/InitPluginRequest.json"}
+        TEST_RESPONSE_FILE=${TEST_RESPONSE_FILE:-"samplePayloads/InitPluginResponse.json"}
         echo "// Check that the plugin loaded OK. Returns the catalogue entries describing what the plugin provides"
         echo "rpc InitPlugin(InitPluginRequest) returns (InitPluginResponse);"
         ;;
     UpdateCatalogue)
         TEST_FILE=${TEST_FILE:-"samplePayloads/UpdateCatalogue.json"}
+        TEST_RESPONSE_FILE=${TEST_RESPONSE_FILE:-"samplePayloads/UpdateCatalogueResponse.json"}
         echo "// Updated catalogue. This will be sent when the core catalogue has been updated (probably by a plugin loading)"
         echo "rpc UpdateCatalogue(Catalogue) returns (google.protobuf.Empty);"
         ;;
 
     CompareContents)
         TEST_FILE=${TEST_FILE:-"samplePayloads/CompareContentsRequest.json"}
+        TEST_RESPONSE_FILE=${TEST_RESPONSE_FILE:-"samplePayloads/CompareContentsResponse.json"}
         echo "// Request to perform a comparison of some contents (matching request)"
         echo "rpc CompareContents(CompareContentsRequest) returns (CompareContentsResponse);"
         ;;
     ConfigureInteraction)
         TEST_FILE=${TEST_FILE:-"samplePayloads/ConfigureInteractionRequest_MattRequest.json"}
+        TEST_RESPONSE_FILE=${TEST_RESPONSE_FILE:-"samplePayloads/ConfigureInteractionResponse_MattRequest.json"}
         echo " // Request to configure/setup the interaction for later verification. Data returned will be persisted in the pact file."
         echo "rpc ConfigureInteraction(ConfigureInteractionRequest) returns (ConfigureInteractionResponse);"
         ;;
     GenerateContent)
         TEST_FILE=${TEST_FILE:-"samplePayloads/GenerateContentRequest.json"}
+        TEST_RESPONSE_FILE=${TEST_RESPONSE_FILE:-"samplePayloads/GenerateContentResponse.json"}
         echo "// Request to generate the content using any defined generators"
         echo "rpc GenerateContent(GenerateContentRequest) returns (GenerateContentResponse);"
         ;;
 
     StartMockServer)
         TEST_FILE=${TEST_FILE:-"samplePayloads/MockServerRequest.json"}
+        TEST_RESPONSE_FILE=${TEST_RESPONSE_FILE:-"samplePayloads/MockServerResponse.json"}
         echo " // Start a mock server"
         echo "rpc StartMockServer(StartMockServerRequest) returns (StartMockServerResponse);"
         ;;
 
     ShutdownMockServer)
         TEST_FILE=${TEST_FILE:-"samplePayloads/ShutdownMockServerRequest.json"}
+        TEST_RESPONSE_FILE=${TEST_RESPONSE_FILE:-"samplePayloads/ShutdownMockServerResponse.json"}
         echo "// Shutdown a running mock server"
         echo " // TODO: Replace the message types with MockServerRequest and MockServerResults in the next major version"
         echo "rpc ShutdownMockServer(ShutdownMockServerRequest) returns (ShutdownMockServerResponse);"
@@ -48,12 +56,14 @@ TestPlugin() {
 
     GetMockServerResults)
         TEST_FILE=${TEST_FILE:-"samplePayloads/GenerateContentRequest.json"}
+        TEST_RESPONSE_FILE=${TEST_RESPONSE_FILE:-"samplePayloads/GenerateContentResponse.json"}
         echo "// Get the matching results from a running mock server"
         echo "rpc GetMockServerResults(MockServerRequest) returns (MockServerResults);"
 
         ;;
     PrepareInteractionForVerification)
         TEST_FILE=${TEST_FILE:-"samplePayloads/VerificationPreparationRequest.json"}
+        TEST_RESPONSE_FILE=${TEST_RESPONSE_FILE:-"samplePayloads/VerificationPreparationResponse.json"}
         echo "// Prepare an interaction for verification. This should return any data required to construct any request"
         echo "// so that it can be amended before the verification is run"
         echo "rpc PrepareInteractionForVerification(VerificationPreparationRequest) returns (VerificationPreparationResponse);"
@@ -61,6 +71,7 @@ TestPlugin() {
 
     VerifyInteraction)
         TEST_FILE=${TEST_FILE:-"samplePayloads/VerifyInteractionRequest.json"}
+        TEST_RESPONSE_FILE=${TEST_RESPONSE_FILE:-"samplePayloads/VerifyInteractionResponse.json"}
         echo "// Execute the verification for the interaction."
         echo "rpc VerifyInteraction(VerifyInteractionRequest) returns (VerifyInteractionResponse);"
 
@@ -85,8 +96,16 @@ TestPlugin() {
         ;;
     esac
     echo "sending $TEST_FILE"
-    jq . "$TEST_FILE"
-    evans cli call io.pact.plugin.PactPlugin."$METHOD" --proto plugin.proto --host localhost -f "$TEST_FILE" --port "$PORT"
+    request=$(jq . "$TEST_FILE")
+    echo "$request"
+    echo "expecting $TEST_RESPONSE_FILE"
+    expected_response=$(jq . "$TEST_RESPONSE_FILE")
+    echo "$expected_response"
+    response=$(evans cli call io.pact.plugin.PactPlugin."$METHOD" --proto plugin.proto --host localhost -f "$TEST_FILE" --port "$PORT")
+    diff <(echo "$response" | jq . -c --sort-keys) <(cat "$TEST_RESPONSE_FILE" | jq -c . --sort-keys) || {
+        echo "mismatch occurred, actual response: " + $(echo "$response" | jq .) + "expected response: $(echo "$expected_response" | jq .)"
+        export ERROR_FLAG=true
+    }
 }
 
 run_test_server() {
@@ -116,10 +135,11 @@ start_exe_and_test() {
     run_test_server
     TestPlugin InitPlugin
     TestPlugin UpdateCatalogue
-    TestPlugin ConfigureInteraction samplePayloads/ConfigureInteractionRequest_MattRequest.json
-    TestPlugin ConfigureInteraction samplePayloads/ConfigureInteractionRequest_MattResponse.json
+    TestPlugin ConfigureInteraction samplePayloads/ConfigureInteractionRequest_MattRequest.json samplePayloads/ConfigureInteractionResponse_MattRequest.json
+    TestPlugin ConfigureInteraction samplePayloads/ConfigureInteractionRequest_MattResponse.json samplePayloads/ConfigureInteractionResponse_MattResponse.json
     TestPlugin CompareContents
-    TestPlugin CompareContents samplePayloads/CompareContentsRequestFailing.json
+    TestPlugin CompareContents samplePayloads/CompareContentsRequestFailing.json samplePayloads/CompareContentsResponseFailing.json
+
     # TestPlugin GenerateContent
     # TestPlugin StartMockServer
     # TestPlugin ShutdownMockServer
@@ -132,8 +152,8 @@ start_exe_and_test() {
     echo "PID:" $_pid
     # Kill all the things
     # killall $PLUGIN_EXECUTABLE_NAME
-    killall "$PLUGIN_EXECUTABLE"
-    kill $_pid
+    killall "$PLUGIN_EXECUTABLE" || true
+    kill $_pid || true
 }
 
 PORT=${PORT:-"50051"}
@@ -189,6 +209,11 @@ elif [[ $TARGET == "objc" || $1 == "objc" ]]; then
     echo "TODO"
 else
     echo "pass a project to test"
+fi
+
+if [[ $ERROR_FLAG == true ]]; then
+    echo "a failure occurred"
+    exit 1
 fi
 
 # PLUGIN_EXECUTABLE_DIR="pact-matt-plugin"
