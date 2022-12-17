@@ -19,7 +19,7 @@ public class PactPluginService : PactPlugin.PactPluginBase
         var contentTypes = new Dictionary<string, string>();
         contentTypes.Add("content-types", "application/foo");
         var catalogueEntries = new[] { new CatalogueEntry
-                                        { Key = "dotnet-template",
+                                        { Key = "foo",
                                         Type = (CatalogueEntry.Types.EntryType)0,
                                         Values = { contentTypes } } };
         response.Catalogue.Add(catalogueEntries);
@@ -41,7 +41,6 @@ public class PactPluginService : PactPlugin.PactPluginBase
         var interactionResponse = new InteractionResponse();
         if (request.ContentsConfig.Fields.ContainsKey("request"))
         {
-
             interactionResponse.PartName = "request";
             var interactionRequestContent = new Body();
             interactionRequestContent.ContentType = "application/foo";
@@ -76,10 +75,18 @@ public class PactPluginService : PactPlugin.PactPluginBase
             var contentMismatch = new ContentMismatch();
             contentMismatch.Actual = actual;
             contentMismatch.Expected = expected;
+            contentMismatch.Diff = "diff";
+            contentMismatch.Path = "$";
+            contentMismatch.Mismatch = $"expected body {expected.ToStringUtf8()} is not equal to actual body {actual.ToStringUtf8()}";
             contentMismatches.Mismatches.Add(contentMismatch);
             var contentMismatchDict = new Dictionary<string, ContentMismatches>();
-            contentMismatchDict.Add("content-types", contentMismatches);
+            contentMismatchDict.Add("$", contentMismatches);
             response.Results.Add(contentMismatchDict);
+            response.Error = "actual does not meet expected";
+            var contentTypeMismatch = new ContentTypeMismatch();
+            contentTypeMismatch.Actual = actual.ToStringUtf8();
+            contentTypeMismatch.Expected = expected.ToStringUtf8();
+            response.TypeMismatch = contentTypeMismatch;
         }
 
 

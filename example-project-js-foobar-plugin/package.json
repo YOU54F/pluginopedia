@@ -6,8 +6,11 @@
     "clean": "rimraf pacts",
     "pretest": "npm run clean",
     "test": "npm run test:consumer && npm run test:provider",
+    "pre:test": "npm install",
     "test:consumer": "ENABLE_FEATURE_V4=true mocha test/*.consumer.spec.ts",
-    "test:provider": "ENABLE_FEATURE_V4=true mocha test/*.provider.spec.ts"
+    "test:provider": "ENABLE_FEATURE_V4=true mocha test/*.provider.spec.ts",
+    "pretest:consumer":  "npm install",
+    "pretest:provider":  "npm install"
   },
   "author": "matt.fellows@onegeek.com.au",
   "license": "MIT",

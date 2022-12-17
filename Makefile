@@ -175,3 +175,19 @@ protoc:
 	esac
 
 
+
+pact_test_all:
+	cd example-project-js-foobar-plugin && LOG_LEVEL=debug TARGET=deno npm run test:consumer
+	cd example-project-js-foobar-plugin && LOG_LEVEL=debug TARGET=dart npm run test:consumer
+	cd example-project-js-foobar-plugin && LOG_LEVEL=debug TARGET=dotnet npm run test:consumer
+	cd example-project-js-foobar-plugin && LOG_LEVEL=debug TARGET=golang npm run test:consumer
+	cd example-project-js-foobar-plugin && LOG_LEVEL=debug TARGET=node npm run test:consumer
+	cd example-project-js-foobar-plugin && LOG_LEVEL=debug TARGET=python npm run test:consumer
+	cd example-project-js-foobar-plugin && LOG_LEVEL=debug TARGET=ruby npm run test:consumer
+	cd example-project-js-foobar-plugin && LOG_LEVEL=debug TARGET=swift npm run test:consumer
+	cd example-project-js-foobar-plugin && LOG_LEVEL=debug TARGET=kotlin npm run test:consumer
+	cd example-project-js-foobar-plugin && LOG_LEVEL=debug TARGET=rust npm run test:consumer
+
+# TARGET=dart make pact_test
+pact_test:
+	cd example-project-js-foobar-plugin && LOG_LEVEL=debug npm run test:consumer

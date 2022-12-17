@@ -11,7 +11,7 @@ const { expect } = chai;
 describe("Plugins - Foo Protocol", () => {
   describe("HTTP interface", () => {
     const pact = new PactV4({
-      consumer: "myconsumer",
+      consumer: "myconsumer-" + process.env.TARGET +"-template",
       provider: "myprovider",
       spec: SpecificationVersion.SPECIFICATION_VERSION_V4,
       logLevel: (process.env.LOG_LEVEL as LogLevel) || "error",
@@ -25,7 +25,7 @@ describe("Plugins - Foo Protocol", () => {
         .given("the Foobar protocol exists")
         .uponReceiving("an HTTP request to /foobar")
         .usingPlugin({
-          plugin: "node-template",
+          plugin: process.env.TARGET +"-template" ?? "dart-template",
           version: "0.0.0",
         })
         .withRequest("POST", "/foobar", (builder) => {

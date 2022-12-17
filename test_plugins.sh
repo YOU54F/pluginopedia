@@ -101,6 +101,7 @@ TestPlugin() {
     echo "expecting $TEST_RESPONSE_FILE"
     expected_response=$(jq . "$TEST_RESPONSE_FILE")
     echo "$expected_response"
+    echo "evans cli call io.pact.plugin.PactPlugin."$METHOD" --proto plugin.proto --host localhost -f "$TEST_FILE" --port "$PORT""
     response=$(evans cli call io.pact.plugin.PactPlugin."$METHOD" --proto plugin.proto --host localhost -f "$TEST_FILE" --port "$PORT")
     diff <(echo "$response" | jq . -c --sort-keys) <(cat "$TEST_RESPONSE_FILE" | jq -c . --sort-keys) || {
         echo "mismatch occurred, actual response: " + $(echo "$response" | jq .) + "expected response: $(echo "$expected_response" | jq .)"
@@ -118,12 +119,12 @@ run_test_server() {
     ./"$PLUGIN_EXECUTABLE" &
     _pid=$!
     sleep 3
-    LISTENING_PORT=$(lsof -aPi -p$_pid -Fn | grep -e n | cut -d ":" -f2)
+    LISTENING_PORT=$(lsof -aPi -p$_pid -Fn | grep -e n -m1 | cut -d ":" -f2)
     PORT=${LISTENING_PORT:-PORT}
     echo "LISTENING_PORT:$LISTENING_PORT"
     echo "PROJECT:$PLUGIN_EXECUTABLE"
     echo "PID:" $_pid
-    echo "PORT:" "${LISTENING_PORT:-PORT}"
+    echo "PORT TO USE:" "$PORT"
     # echo '{"contentType":"application/matt","contentsConfig":{"request":{"body":"hello"}}}' | evans cli call io.pact.plugin.PactPlugin.ConfigureInteraction --proto ../plugin.proto --port ${1:-$LISTENING_PORT} --host localhost; \
     # killall $PLUGIN_EXECUTABLE
     echo "leaving" "$PLUGIN_EXECUTABLE_DIR"
