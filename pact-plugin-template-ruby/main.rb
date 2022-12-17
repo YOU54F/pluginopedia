@@ -23,9 +23,9 @@ class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
   def init_plugin(init_plugin_req, _unused_call)
     puts "Received InitPluginRequest: #{init_plugin_req}"
     content_matcher_req = [{
-      'key' => 'matt',
+      'key' => 'foo',
       'type' => 0,
-      'values' => { 'content-types' => 'application/matt' }
+      'values' => { 'content-types' => 'application/foo' }
     }]
     Io::Pact::Plugin::InitPluginResponse.new(catalogue: content_matcher_req)
   end
@@ -75,8 +75,8 @@ class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
       puts contents_config[:contentsConfig][:fields][:request]
       request_body = contents_config[:contentsConfig][:fields]['request'][:struct_value][:fields]['body'][:string_value]
       interactions.push(Io::Pact::Plugin::InteractionResponse.new(contents: {
-                                                                    contentType: 'application/matt',
-                                                                    content: Google::Protobuf::BytesValue.new(value: 'MATT' + request_body + 'MATT')
+                                                                    contentType: 'application/foo',
+                                                                    content: Google::Protobuf::BytesValue.new(value: request_body)
                                                                   }))
     end
     if contents_config[:contentsConfig][:fields]['response']
@@ -84,8 +84,8 @@ class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
       puts contents_config[:contentsConfig][:fields][:response]
       response_body = contents_config[:contentsConfig][:fields]['response'][:struct_value][:fields]['body'][:string_value]
       interactions.push(Io::Pact::Plugin::InteractionResponse.new(contents: {
-                                                                    contentType: 'application/matt',
-                                                                    content: Google::Protobuf::BytesValue.new(value: 'MATT' + response_body + 'MATT')
+                                                                    contentType: 'application/foo',
+                                                                    content: Google::Protobuf::BytesValue.new(value:response_body)
                                                                   }))
     end
     Io::Pact::Plugin::ConfigureInteractionResponse.new(interaction: interactions)
@@ -100,20 +100,13 @@ class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
     # plugin_configuration = generate_content[:pluginConfiguration]
     content = generate_content[:contents][:content]
     if content[:value]
-      config = content[:value]
-      response_body = "MATT#{config}MATT"
+      response_body = content[:value]
       puts "Returning GenerateContent response: #{JSON.pretty_generate(response_body)}"
       return Io::Pact::Plugin::GenerateContentResponse.new(contents: {
-                                                             contentType: 'application/matt',
+                                                             contentType: 'application/foo',
                                                              content: Google::Protobuf::BytesValue.new(value: response_body)
                                                            })
     end
-    response_body = 'YOUSAF'
-    puts "Returning DefaultGenerateContent response: #{JSON.pretty_generate(response_body)}"
-    Io::Pact::Plugin::GenerateContentResponse.new(contents: {
-                                                    contentType: 'application/matt',
-                                                    content: Google::Protobuf::BytesValue.new(value: response_body)
-                                                  })
   end
 
   # TODO

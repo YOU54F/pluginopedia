@@ -35,7 +35,7 @@ const pactPluginServer: PactPluginHandlers = {
           type: _io_pact_plugin_CatalogueEntry_EntryType.CONTENT_MATCHER,
           values: { 'content-types': 'application/foo' },
           key: 'matt',
-          // values: { 'content-types': 'text/plain;application/matt' },
+          // values: { 'content-types': 'text/plain;application/foo' },
           // key: 'matt',
         },
       ],
@@ -61,17 +61,36 @@ const pactPluginServer: PactPluginHandlers = {
       console.log(`(server) Got configureInteraction message:`, call.request);
     }
 
-    callback(null, {
-      interaction: [
-        {
-          contents: {
-            content: { value: new TextEncoder().encode('hello') },
-            contentType: 'application/matt',
-          },
-          partName: 'request',
-          // messageMetadata: { fields: { stringValue: "foo" } }
+    const contentsConfig = JSON.parse(
+      JSON.stringify(call.request.contentsConfig?.fields)
+    );
+
+
+    const interactions: ConfigureInteractionResponse['interaction'] = [];
+
+    if (contentsConfig.request) {
+      console.log(contentsConfig.request)
+      interactions.push({
+        contents: {
+          content: { value: new TextEncoder().encode(contentsConfig.request.structValue.fields.body.stringValue) },
+          contentType: 'application/foo',
         },
-      ],
+        partName: 'request',
+      });
+    }
+    if (contentsConfig.response) {
+      console.log(contentsConfig.response)
+      interactions.push({
+        contents: {
+          content: { value: new TextEncoder().encode(contentsConfig.response.structValue.fields.body.stringValue) },
+          contentType: 'application/foo',
+        },
+        partName: 'response',
+      });
+    }
+
+    callback(null, {
+      interaction: interactions,
     });
   },
   compareContents(

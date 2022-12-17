@@ -78,7 +78,7 @@ const PactPluginService: PactPlugin = {
           type: 0,
           // type: "CONTENT_MATCHER",
           key: "matt",
-          values: { "content-types": "application/matt" }
+          values: { "content-types": "application/foo" }
         },
         // {
         //   // @ts-ignore
@@ -145,7 +145,7 @@ const PactPluginService: PactPlugin = {
         {
           contents: {
             content: { value: new TextEncoder().encode("hello") },
-            contentType: "application/matt"
+            contentType: "application/foo"
           },
           partName: "request",
           // messageMetadata: { fields: { stringValue: "foo" } }
@@ -178,7 +178,7 @@ const PactPluginService: PactPlugin = {
       // ],
       // "request": {
       //   "body": {
-      //     "content": "MATThelloMATT",
+      //     "content": "hello",
       //     "contentType": "application/matt",
       //     "contentTypeHint": "DEFAULT",
       //     "encoded": false
@@ -193,7 +193,7 @@ const PactPluginService: PactPlugin = {
       // },
       // "response": {
       //   "body": {
-      //     "content": "MATTworldMATT",
+      //     "content": "world",
       //     "contentType": "application/matt",
       //     "contentTypeHint": "DEFAULT",
       //     "encoded": false

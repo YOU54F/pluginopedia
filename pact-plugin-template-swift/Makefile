@@ -11,4 +11,4 @@ run:
 	.build/arm64-apple-macosx/debug/PactPlugin
 
 bin_copy:
-	mv .build/arm64-apple-macosx/debug/PactPlugin .
+	cp .build/arm64-apple-macosx/debug/PactPlugin .

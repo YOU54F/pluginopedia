@@ -14,7 +14,7 @@ echo '{ "implementation": "pact-rust", "version":"1.2.3" }' | evans cli call io.
 #       "key": "dotnet-template",
 #       "type": "TRANSPORT",
 #       "values": {
-#         "content-types": "application/matt"
+#         "content-types": "application/foo"
 #       }
 #     }
 #   ]

@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "executableType": "exec",
   "minimumRequiredVersion": null,
-  "entryPoint": ".build/debug/PactPlugin",
+  "entryPoint": "PactPlugin",
   "entryPoints": {},
   "args": null,
   "dependencies": null,

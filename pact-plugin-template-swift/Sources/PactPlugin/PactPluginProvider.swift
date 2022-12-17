@@ -23,8 +23,8 @@
   final class PactPluginProvider: Io_Pact_Plugin_PactPluginProvider {
     var interceptors: Io_Pact_Plugin_PactPluginServerInterceptorFactoryProtocol?
 
-    let contentTypeKey = "matt"
-    let contentType = "application/matt"
+    let contentTypeKey = "foo"
+    let contentType = "application/foo"
 
     func initPlugin(request: Io_Pact_Plugin_InitPluginRequest, context: StatusOnlyCallContext)
       -> EventLoopFuture<Io_Pact_Plugin_InitPluginResponse>
@@ -60,6 +60,7 @@
     ) -> EventLoopFuture<Io_Pact_Plugin_CompareContentsResponse> {
       print("compareContents:")
       print(request)
+      // TODO
       return context.eventLoop.makeSucceededFuture(Io_Pact_Plugin_CompareContentsResponse())
     }
 
@@ -74,7 +75,7 @@
       var requestPart = Io_Pact_Plugin_InteractionResponse.init()
         requestPart.partName = "request"
         requestPart.contents.contentType = contentType
-        requestPart.contents.content.value = "MATThelloMATT".data(using: String.Encoding.utf8)!
+        requestPart.contents.content.value = "hello".data(using: String.Encoding.utf8)!
         interactions.interaction.append(requestPart)
       }
 
@@ -82,7 +83,7 @@
       var responsePart = Io_Pact_Plugin_InteractionResponse.init()
         responsePart.partName = "response"
         responsePart.contents.contentType = contentType
-        responsePart.contents.content.value = "MATThelloMATT".data(using: String.Encoding.utf8)!
+        responsePart.contents.content.value = "world".data(using: String.Encoding.utf8)!
         interactions.interaction.append(responsePart)
 
       }
@@ -96,6 +97,7 @@
     ) -> EventLoopFuture<Io_Pact_Plugin_GenerateContentResponse> {
       print("generateContent:")
       print(request)
+      // TODO
       return context.eventLoop.makeSucceededFuture(Io_Pact_Plugin_GenerateContentResponse())
     }
 
@@ -104,6 +106,7 @@
     ) -> EventLoopFuture<Io_Pact_Plugin_StartMockServerResponse> {
       print("startMockServer:")
       print(request)
+      // TODO
       return context.eventLoop.makeSucceededFuture(Io_Pact_Plugin_StartMockServerResponse())
     }
 
@@ -112,6 +115,7 @@
     ) -> EventLoopFuture<Io_Pact_Plugin_ShutdownMockServerResponse> {
       print("shutdownMockServer:")
       print(request)
+      // TODO
       return context.eventLoop.makeSucceededFuture(Io_Pact_Plugin_ShutdownMockServerResponse())
     }
 
@@ -120,6 +124,7 @@
     ) -> EventLoopFuture<Io_Pact_Plugin_MockServerResults> {
       print("getMockServerResults:")
       print(request)
+      // TODO
       return context.eventLoop.makeSucceededFuture(Io_Pact_Plugin_MockServerResults())
     }
 
@@ -128,6 +133,7 @@
     ) -> EventLoopFuture<Io_Pact_Plugin_VerificationPreparationResponse> {
       print("prepareInteractionForVerification:")
       print(request)
+      // TODO
       return context.eventLoop.makeSucceededFuture(Io_Pact_Plugin_VerificationPreparationResponse())
     }
 
@@ -136,6 +142,7 @@
     ) -> EventLoopFuture<Io_Pact_Plugin_VerifyInteractionResponse> {
       print("verifyInteraction:")
       print(request)
+      // TODO
       return context.eventLoop.makeSucceededFuture(Io_Pact_Plugin_VerifyInteractionResponse())
     }
   }

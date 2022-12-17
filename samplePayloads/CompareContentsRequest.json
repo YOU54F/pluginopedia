@@ -1,11 +1,11 @@
 {
   "expected": {
-    "contentType": "application/matt",
-    "content": "TUFUVGhlbGxvTUFUVA=="
+    "contentType": "application/foo",
+    "content": "aGVsbG8="
   },
   "actual": {
-    "contentType": "application/matt",
-    "content": "TUFUVGhlbGxvTUFUVA=="
+    "contentType": "application/foo",
+    "content": "aGVsbG8="
   },
   "pluginConfiguration": {
     "interactionConfiguration": {},

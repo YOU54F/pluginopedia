@@ -20,7 +20,7 @@ class PactPluginServer extends PactPluginServiceBase {
         key: 'matt',
         type: CatalogueEntry_EntryType.CONTENT_MATCHER,
         values: {
-          'content-types': "application/matt",
+          'content-types': "application/foo",
         }));
     return response;
   }
@@ -44,9 +44,8 @@ class PactPluginServer extends PactPluginServiceBase {
         InteractionResponse(
             partName: "request",
             contents: Body(
-                contentType: "application/matt",
-                content:
-                    BytesValue(value: utf8.encode('MATT${requestBody}MATT')))),
+                contentType: "application/foo",
+                content: BytesValue(value: utf8.encode('$requestBody')))),
       ]);
     }
     if (request.contentsConfig.fields.containsKey('response')) {
@@ -57,9 +56,8 @@ class PactPluginServer extends PactPluginServiceBase {
         InteractionResponse(
             partName: "response",
             contents: Body(
-                contentType: "application/matt",
-                content:
-                    BytesValue(value: utf8.encode('MATT${responseBody}MATT')))),
+                contentType: "application/foo",
+                content: BytesValue(value: utf8.encode('responseBody')))),
       ]);
     }
     return ConfigureInteractionResponse();

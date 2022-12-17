@@ -2,8 +2,8 @@
   "interaction": [
     {
       "contents": {
-        "content": "TUFUVGhlbGxvTUFUVA==",
-        "contentType": "application/matt"
+        "content": "aGVsbG8=",
+        "contentType": "application/foo"
       },
       "partName": "request"
     }
