@@ -2,7 +2,7 @@ TEST?=./...
 .DEFAULT_GOAL := ci
 FFI_VERSION=0.3.15
 # Update this version
-VERSION=0.0.1
+VERSION=0.0.0
 # Update to your project name
 PROJECT=golang-template
 

@@ -178,7 +178,7 @@ elif [[ $TARGET == "dotnet" || $1 == "dotnet" ]]; then
     start_exe_and_test
 elif [[ $TARGET == "golang" || $1 == "golang" ]]; then
     PLUGIN_EXECUTABLE_DIR="pact-plugin-template-golang"
-    PLUGIN_EXECUTABLE=build/foobar
+    PLUGIN_EXECUTABLE=golang-template
     start_exe_and_test
 elif [[ $TARGET == "swift" || $1 == "swift" ]]; then
     PLUGIN_EXECUTABLE_DIR="pact-plugin-template-swift"
