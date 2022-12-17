@@ -4,6 +4,7 @@ on:
   push:
   workflow_dispatch:
 
+ 
 jobs:
   dart:
     timeout-minutes: 10
@@ -28,7 +29,14 @@ jobs:
           repo: ktr0731/evans
           tag: v0.10.9
       - run: make test
-      - run: make pact_test
+      - if: runner.os != 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE/../
+          make pact_test
+      - if: runner.os == 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE\\..\\
+          make pact_test
   deno:
     timeout-minutes: 10
     strategy:
@@ -54,7 +62,14 @@ jobs:
           repo: ktr0731/evans
           tag: v0.10.9
       - run: make test
-      - run: make pact_test
+      - if: runner.os != 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE/../
+          make pact_test
+      - if: runner.os == 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE\\..\\
+          make pact_test
   dotnet:
     timeout-minutes: 10
     strategy:
@@ -81,7 +96,14 @@ jobs:
           repo: ktr0731/evans
           tag: v0.10.9
       - run: make test
-      - run: make pact_test
+      - if: runner.os != 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE/../
+          make pact_test
+      - if: runner.os == 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE\\..\\
+          make pact_test
   golang:
     timeout-minutes: 10
     strategy:
@@ -107,7 +129,14 @@ jobs:
           repo: ktr0731/evans
           tag: v0.10.9
       - run: make test
-      - run: make pact_test
+      - if: runner.os != 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE/../
+          make pact_test
+      - if: runner.os == 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE\\..\\
+          make pact_test
   kotlin:
     timeout-minutes: 10
     strategy:
@@ -131,7 +160,14 @@ jobs:
           repo: ktr0731/evans
           tag: v0.10.9
       - run: make test
-      - run: make pact_test
+      - if: runner.os != 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE/../
+          make pact_test
+      - if: runner.os == 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE\\..\\
+          make pact_test
   node:
     timeout-minutes: 10
     strategy:
@@ -157,7 +193,14 @@ jobs:
           repo: ktr0731/evans
           tag: v0.10.9
       - run: make test
-      - run: make pact_test
+      - if: runner.os != 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE/../
+          make pact_test
+      - if: runner.os == 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE\\..\\
+          make pact_test
   python:
     timeout-minutes: 10
     strategy:
@@ -183,7 +226,14 @@ jobs:
           repo: ktr0731/evans
           tag: v0.10.9
       - run: make test
-      - run: make pact_test
+      - if: runner.os != 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE/../
+          make pact_test
+      - if: runner.os == 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE\\..\\
+          make pact_test
   ruby:
     timeout-minutes: 10
     strategy:
@@ -209,7 +259,14 @@ jobs:
           repo: ktr0731/evans
           tag: v0.10.9
       - run: make test
-      - run: make pact_test
+      - if: runner.os != 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE/../
+          make pact_test
+      - if: runner.os == 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE\\..\\
+          make pact_test
   rust:
     timeout-minutes: 10
     strategy:
@@ -235,7 +292,14 @@ jobs:
           repo: ktr0731/evans
           tag: v0.10.9
       - run: make test
-      - run: make pact_test
+      - if: runner.os != 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE/../
+          make pact_test
+      - if: runner.os == 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE\\..\\
+          make pact_test
   swift:
     timeout-minutes: 10
     strategy:
@@ -263,4 +327,11 @@ jobs:
           repo: ktr0731/evans
           tag: v0.10.9
       - run: make test
-      - run: make pact_test
+      - if: runner.os != 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE/../
+          make pact_test
+      - if: runner.os == 'Windows'
+        run: |
+          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE\\..\\
+          make pact_test
