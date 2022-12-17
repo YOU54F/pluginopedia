@@ -1,5 +1,5 @@
 {
-    "error": "we had a mismatch",
+    "error": "actual does not meet expected",
     "results": {
       "$": {
         "mismatches": [
@@ -7,14 +7,14 @@
             "actual": "d29ybGQ=",
             "diff": "diff",
             "expected": "aGVsbG8=",
-            "mismatch": "mismatch",
+            "mismatch": "expected body hello is not equal to actual body world",
             "path": "$"
           }
         ]
       }
     },
     "typeMismatch": {
-      "actual": "\n\u0005world",
-      "expected": "\n\u0005hello"
+      "actual": "world",
+      "expected": "hello"
     }
   }

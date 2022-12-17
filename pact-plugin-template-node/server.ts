@@ -34,9 +34,7 @@ const pactPluginServer: PactPluginHandlers = {
         {
           type: _io_pact_plugin_CatalogueEntry_EntryType.CONTENT_MATCHER,
           values: { 'content-types': 'application/foo' },
-          key: 'matt',
-          // values: { 'content-types': 'text/plain;application/foo' },
-          // key: 'matt',
+          key: 'foo',
         },
       ],
     });
@@ -104,7 +102,7 @@ const pactPluginServer: PactPluginHandlers = {
     const actual = call.request.actual?.content;
     const expected = call.request.expected?.content;
 
-    if (actual != expected) {
+    if (actual?.value?.toString() !== expected?.value?.toString()) {
       return callback(null, {
         error: 'actual does not meet expected',
         results: {
@@ -114,11 +112,17 @@ const pactPluginServer: PactPluginHandlers = {
                 path: '$',
                 actual,
                 expected,
-                mismatch: `"expected body ${expected?.value} is not equal to actual body ${actual?.value}`,
+                diff: "diff",
+                mismatch: `expected body ${expected?.value} is not equal to actual body ${actual?.value}`,
               },
             ],
+
           },
         },
+        typeMismatch:{
+          actual:actual?.value as string,
+          expected: expected?.value as string,
+        }
       });
     } else {
       return callback(null, {});

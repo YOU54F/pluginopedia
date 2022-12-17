@@ -67,21 +67,26 @@ class PactPluginServer extends PactPluginServiceBase {
   Future<CompareContentsResponse> compareContents(
       ServiceCall call, CompareContentsRequest request) async {
     log('Received CompareContentsRequest: $request');
-    var actual = utf8.decode(request.actual.content.writeToBuffer());
-    var expected = utf8.decode(request.expected.content.writeToBuffer());
+    var actual =
+        utf8.decode(request.actual.content.writeToBuffer()).substring(2);
+    var expected =
+        utf8.decode(request.expected.content.writeToBuffer()).substring(2);
     if (actual == expected) {
       return CompareContentsResponse();
     }
+    var actualContent = request.actual.content;
+    var expectedContent = request.expected.content;
     var response = CompareContentsResponse(
-        error: "we had a mismatch",
+        error: "actual does not meet expected",
         results: {
           "\$": ContentMismatches(mismatches: [
             ContentMismatch(
                 diff: "diff",
-                mismatch: 'mismatch',
+                mismatch:
+                    'expected body $expected is not equal to actual body $actual',
                 path: "\$",
-                actual: request.actual.content,
-                expected: request.expected.content)
+                actual: actualContent,
+                expected: expectedContent)
           ])
         },
         typeMismatch: ContentTypeMismatch(actual: actual, expected: expected));

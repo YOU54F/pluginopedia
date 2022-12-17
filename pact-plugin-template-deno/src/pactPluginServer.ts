@@ -24,7 +24,8 @@ import {
   VerifyInteractionResponse,
   Empty,
   BytesValue,
-  Struct
+  Struct,
+  InteractionResponse
 } from "./plugin_inlined.d.ts";
 import { getAvailablePort } from "https://deno.land/x/port/mod.ts";
 import { protoFile } from "./pluginProtoUint8Array.ts";
@@ -54,7 +55,7 @@ import {
 // });
 
 // const cl = getLogger();
-const cl = console
+const cl = console;
 const PactPluginService: PactPlugin = {
   // enum EntryType {
   //   // Matcher for contents of messages, requests or response bodies
@@ -77,9 +78,9 @@ const PactPluginService: PactPlugin = {
           // @ts-ignore
           type: 0,
           // type: "CONTENT_MATCHER",
-          key: "matt",
+          key: "foo",
           values: { "content-types": "application/foo" }
-        },
+        }
         // {
         //   // @ts-ignore
         //   type: 1,
@@ -119,95 +120,74 @@ const PactPluginService: PactPlugin = {
   ): Promise<CompareContentsResponse> {
     cl.info("CompareContents");
     cl.info(request);
-    // fileHandler.flush();
-    return Promise.resolve({
-      // error: "string",
-      // typeMismatch: { expected: "expected", actual: "actual" },
-      results: { mismatches: [] }
-    });
+
+    const actual = new TextDecoder().decode(request.actual?.content?.value);
+    const expected = new TextDecoder().decode(request.expected?.content?.value);
+    cl.info("expected", expected);
+    cl.info("actual", actual);
+    if (actual !== expected) {
+      // @ts-ignore
+      return Promise.resolve({
+        error: "actual does not meet expected",
+        typeMismatch: {
+          actual,
+          expected
+        },
+        results: {
+          $: {
+            mismatches: [
+              {
+                diff: "diff",
+                actual: { value: request.actual?.content?.value }, // actual and expected are not being set
+                expected: { value: request.expected?.content?.value },
+                mismatch:
+                  "expected body hello is not equal to actual body world",
+                path: "$"
+                // "results":{"$":{"mismatches":[{"actual":null,"diff":"diff","expected":null,"mismatch":"expected body hello is not equal to actual body world","path":"$"}]}},"typeMismatch":{"actual":"world"}}
+              }
+            ]
+          }
+        }
+      });
+    } else {
+      return Promise.resolve({});
+    }
   },
 
   ConfigureInteraction(
     request: ConfigureInteractionRequest
   ): Promise<ConfigureInteractionResponse> {
-    cl.info("ConfigureInteraction",request);
+    cl.info("ConfigureInteraction", request);
     // cl.info(request);
-    // // cl.info(request.contentsConfig?.fields?.stringValue)
-    // fileHandler.flush();
-    // cl.info(request.contentType);
-    // cl.info(request.contentsConfig?.fields?.stringValue);
-    // fileHandler.flush();
-
-    // const resp = ConfigureInteractionResponse
-    return Promise.resolve({
-      // interaction: []
-      interaction: [
-        {
-          contents: {
-            content: { value: new TextEncoder().encode("hello") },
-            contentType: "application/foo"
-          },
-          partName: "request",
-          // messageMetadata: { fields: { stringValue: "foo" } }
+    // @ts-ignore
+    cl.info("request", request.contentsConfig?.fields["request"]);
+    // @ts-ignore
+    cl.info("response", request.contentsConfig?.fields["response"]);
+    const interaction: InteractionResponse[] = [];
+    // @ts-ignore
+    if (request.contentsConfig?.fields["request"]) {
+      interaction.push({
+        contents: {
+          content: { value: new TextEncoder().encode("hello") },
+          contentType: "application/foo"
         },
-        // {
-        //   contents: {
-        //     content: { value: new TextEncoder().encode("world") },
-        //     contentType: "application/foo"
-        //   },
-        //   partName: "response"
-        // }
-      ]
-      // error: "error_string",
-      //     interaction: [
-      // {   contents:  {
-      //      "content": request.contentsConfig?.fields?.stringValue ?? 'foo',
-      //      "contentType": "application/json",
-      //      "contentTypeHint": "DEFAULT",
-      //      "encoded": false
-      //    }}
+        partName: "request"
+      });
+    }
+    // @ts-ignore
+    if (request.contentsConfig?.fields["response"]) {
+      interaction.push({
+        contents: {
+          content: { value: new TextEncoder().encode("world") },
+          contentType: "application/foo"
+        },
+        partName: "response"
+      });
+    }
+    console.log("returning interaction", interaction);
 
-      // {
-      // "description": "an HTTP request to /matt",
-      // "key": "b6c5b973534175ec",
-      // "pending": false,
-      // "providerStates": [
-      //   {
-      //     "name": "the Matt protocol exists"
-      //   }
-      // ],
-      // "request": {
-      //   "body": {
-      //     "content": "hello",
-      //     "contentType": "application/matt",
-      //     "contentTypeHint": "DEFAULT",
-      //     "encoded": false
-      //   },
-      //   "headers": {
-      //     "content-type": [
-      //       "application/matt"
-      //     ]
-      //   },
-      //   "method": "POST",
-      //   "path": "/matt"
-      // },
-      // "response": {
-      //   "body": {
-      //     "content": "world",
-      //     "contentType": "application/matt",
-      //     "contentTypeHint": "DEFAULT",
-      //     "encoded": false
-      //   },
-      //   "headers": {
-      //     "content-type": [
-      //       "application/matt"
-      //     ]
-      //   },
-      //   "status": 200
-      // },
-      // "type": "Synchronous/HTTP"
-      // }]
-      // pluginConfiguration: PluginConfiguration,
+    return Promise.resolve({
+      interaction
     });
   },
 
@@ -218,10 +198,10 @@ const PactPluginService: PactPlugin = {
     cl.info(request);
     // fileHandler.flush();
     return Promise.resolve({
-      contents: {
-        content: { value: new TextEncoder().encode("foo") },
-        contentType: "application/foo"
-      }
+      // contents: {
+      //   content: { value: new TextEncoder().encode("foo") },
+      //   contentType: "application/foo"
+      // }
     });
   },
 
@@ -313,10 +293,9 @@ const main = async () => {
       server.handle(conn);
       // fileHandler.flush();
     }
-  }catch (e){
-    throw new Error(e)
+  } catch (e) {
+    throw new Error(e);
   }
-
 };
 
 await main();
