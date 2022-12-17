@@ -60,8 +60,31 @@
     ) -> EventLoopFuture<Io_Pact_Plugin_CompareContentsResponse> {
       print("compareContents:")
       print(request)
+      let actual = request.actual.content.value
+      let expected = request.expected.content.value
+
+      if actual != expected {
+
+        var compareContentsResponse = Io_Pact_Plugin_CompareContentsResponse()
+        compareContentsResponse.error = "actual does not meet expected"
+        compareContentsResponse.typeMismatch.actual = String(data: actual, encoding: .utf8)!
+        compareContentsResponse.typeMismatch.expected = String(data: expected, encoding: .utf8)!
+        var contentMismatches = Io_Pact_Plugin_ContentMismatches()
+        var contentMismatch = Io_Pact_Plugin_ContentMismatch()
+        contentMismatch.diff = "diff"
+        contentMismatch.path = "$"
+        contentMismatch.actual.value = actual
+        contentMismatch.expected.value = expected
+        contentMismatch.mismatch = "expected body \(String(data: expected, encoding: .utf8)!) is not equal to actual body \(String(data: actual, encoding: .utf8)!)"
+        contentMismatches.mismatches = [contentMismatch]
+        compareContentsResponse.results = ["$": contentMismatches]
+        return context.eventLoop.makeSucceededFuture(compareContentsResponse)
+
+      } else {
+        return context.eventLoop.makeSucceededFuture(Io_Pact_Plugin_CompareContentsResponse())
+
+      }
       // TODO
-      return context.eventLoop.makeSucceededFuture(Io_Pact_Plugin_CompareContentsResponse())
     }
 
     func configureInteraction(
@@ -72,7 +95,7 @@
       var interactions: Io_Pact_Plugin_ConfigureInteractionResponse =
         Io_Pact_Plugin_ConfigureInteractionResponse.init()
       if request.contentsConfig.fields.keys.contains("request") {
-      var requestPart = Io_Pact_Plugin_InteractionResponse.init()
+        var requestPart = Io_Pact_Plugin_InteractionResponse.init()
         requestPart.partName = "request"
         requestPart.contents.contentType = contentType
         requestPart.contents.content.value = "hello".data(using: String.Encoding.utf8)!
@@ -80,7 +103,7 @@
       }
 
       if request.contentsConfig.fields.keys.contains("response") {
-      var responsePart = Io_Pact_Plugin_InteractionResponse.init()
+        var responsePart = Io_Pact_Plugin_InteractionResponse.init()
         responsePart.partName = "response"
         responsePart.contents.contentType = contentType
         responsePart.contents.content.value = "world".data(using: String.Encoding.utf8)!
@@ -98,6 +121,7 @@
       print("generateContent:")
       print(request)
       // TODO
+
       return context.eventLoop.makeSucceededFuture(Io_Pact_Plugin_GenerateContentResponse())
     }
 

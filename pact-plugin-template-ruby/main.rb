@@ -42,7 +42,7 @@ class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
     actual = compare_contents[:actual][:content][:value]
     expected = compare_contents[:expected][:content][:value]
     if actual != expected
-      mismatch = "expected body: #{expected} is not equal to actual body: #{actual}"
+      mismatch = "expected body #{expected} is not equal to actual body #{actual}"
       puts "Mismatch found: #{mismatch}"
       Io::Pact::Plugin::CompareContentsResponse.new({
                                                       results: { "$": {
@@ -55,7 +55,12 @@ class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
                                                         diff: 'diff'
                                                       }]
                                                       } },
-                                                      error: 'mismatch'
+                                                      error: 'actual does not meet expected',
+                                                      typeMismatch: {
+                                                        actual: actual,
+                                                        expected: expected
+
+                                                      }
                                                     })
     else
       Io::Pact::Plugin::CompareContentsResponse.new
@@ -77,7 +82,8 @@ class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
       interactions.push(Io::Pact::Plugin::InteractionResponse.new(contents: {
                                                                     contentType: 'application/foo',
                                                                     content: Google::Protobuf::BytesValue.new(value: request_body)
-                                                                  }))
+                                                                  },
+                                                                  partName: 'request'))
     end
     if contents_config[:contentsConfig][:fields]['response']
       pp 'got a response interaction'
@@ -85,8 +91,9 @@ class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
       response_body = contents_config[:contentsConfig][:fields]['response'][:struct_value][:fields]['body'][:string_value]
       interactions.push(Io::Pact::Plugin::InteractionResponse.new(contents: {
                                                                     contentType: 'application/foo',
-                                                                    content: Google::Protobuf::BytesValue.new(value:response_body)
-                                                                  }))
+                                                                    content: Google::Protobuf::BytesValue.new(value: response_body)
+                                                                  },
+                                                                  partName: 'response'))
     end
     Io::Pact::Plugin::ConfigureInteractionResponse.new(interaction: interactions)
   end
@@ -99,14 +106,14 @@ class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
     # generators = generate_content[:generators]
     # plugin_configuration = generate_content[:pluginConfiguration]
     content = generate_content[:contents][:content]
-    if content[:value]
-      response_body = content[:value]
-      puts "Returning GenerateContent response: #{JSON.pretty_generate(response_body)}"
-      return Io::Pact::Plugin::GenerateContentResponse.new(contents: {
-                                                             contentType: 'application/foo',
-                                                             content: Google::Protobuf::BytesValue.new(value: response_body)
-                                                           })
-    end
+    return unless content[:value]
+
+    response_body = content[:value]
+    puts "Returning GenerateContent response: #{JSON.pretty_generate(response_body)}"
+    Io::Pact::Plugin::GenerateContentResponse.new(contents: {
+                                                    contentType: 'application/foo',
+                                                    content: Google::Protobuf::BytesValue.new(value: response_body)
+                                                  })
   end
 
   # TODO

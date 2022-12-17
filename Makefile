@@ -76,9 +76,9 @@ test_all:
 	TARGET=dotnet make test
 	TARGET=golang make test
 	TARGET=node make test
-	TARGET=python make test
-	TARGET=ruby make test
 	TARGET=swift make test
+	TARGET=ruby make test
+	TARGET=python make test
 	TARGET=kotlin make test
 	TARGET=rust make test
 

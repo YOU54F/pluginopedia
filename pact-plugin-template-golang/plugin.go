@@ -45,7 +45,7 @@ func (m *pluginServer) InitPlugin(ctx context.Context, req *plugin.InitPluginReq
 	return &plugin.InitPluginResponse{
 		Catalogue: []*plugin.CatalogueEntry{
 			{
-				Key:  "foobarplugin",                        // TODO: changeme!
+				Key:  "foo",                                 // TODO: changeme!
 				Type: plugin.CatalogueEntry_CONTENT_MATCHER, // TODO: changeme!
 				Values: map[string]string{
 					"content-types": CONTENT_TYPE,
@@ -141,7 +141,7 @@ func (m *pluginServer) CompareContents(ctx context.Context, req *plugin.CompareC
 	// Perform the matching logic.
 	// Here we are simply checking exact values
 	if compare(actual, expected) {
-		mismatch = fmt.Sprintf("expected body '%s' is not equal to actual body '%s'", expected, actual)
+		mismatch = fmt.Sprintf("expected body %s is not equal to actual body %s", expected, actual)
 		log.Println("Mismatch found:", mismatch)
 
 		return &plugin.CompareContentsResponse{
@@ -161,9 +161,15 @@ func (m *pluginServer) CompareContents(ctx context.Context, req *plugin.CompareC
 							Actual:   wrapperspb.Bytes([]byte(actual)),
 							Mismatch: mismatch,
 							Path:     "$",
+							Diff:     "diff",
 						},
 					},
 				},
+			},
+			Error: "actual does not meet expected",
+			TypeMismatch: &plugin.ContentTypeMismatch{
+				Actual:   actual,
+				Expected: expected,
 			},
 		}, nil
 	}
