@@ -4,7 +4,7 @@
   import NIOCore
   import NIOPosix
   import PactPluginModel
-  import Darwin
+  // import Darwin
   import Foundation
 
   @available(macOS 10.15, iOS 13, tvOS 13, watchOS 6, *)
