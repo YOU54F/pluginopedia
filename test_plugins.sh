@@ -125,15 +125,48 @@ run_test_server() {
     echo "PROJECT:$PLUGIN_EXECUTABLE"
     echo "PID:" $_pid
     echo "PORT TO USE:" "$PORT"
-    # echo '{"contentType":"application/matt","contentsConfig":{"request":{"body":"hello"}}}' | evans cli call io.pact.plugin.PactPlugin.ConfigureInteraction --proto ../plugin.proto --port ${1:-$LISTENING_PORT} --host localhost; \
     # killall $PLUGIN_EXECUTABLE
     echo "leaving" "$PLUGIN_EXECUTABLE_DIR"
     cd "$PACT_PLUGIN_DIR" || exit
     echo "entering" "$PWD"
 }
 
-start_exe_and_test() {
+health_check() {
+    COUNT=0
+    SERVER_STARTED=false
+    ERROR_FLAG=false
     run_test_server
+    while [[ $SERVER_STARTED != true || $COUNT > 10 ]]; do
+        echo "COUNT "$COUNT
+        echo "SERVER_STARTED "$SERVER_STARTED
+        echo "ERROR_FLAG "$ERROR_FLAG
+        TestPlugin InitPlugin
+        if [[ $ERROR_FLAG == false ]]; then
+            SERVER_STARTED=true
+            echo "SERVER_STARTED" $SERVER_STARTED
+            ((COUNT++))
+            ERROR_FLAG=false
+            echo "shimmy "$COUNT
+            break
+        fi
+        if [[ $ERROR_FLAG == true ]]; then
+            echo "got an error, retrying after 1s"
+            sleep 1
+            ((COUNT++))
+            echo "COUNT "$COUNT
+            break
+        fi
+        if [[ $COUNT == 10 && $SERVER_STARTED != true ]]; then
+            echo 'expired healthcheck'
+            killall "$PLUGIN_EXECUTABLE" || true
+            kill $_pid || true
+            exit 1
+        fi
+    done
+}
+
+start_exe_and_test() {
+    health_check
     TestPlugin InitPlugin
     TestPlugin UpdateCatalogue
     TestPlugin ConfigureInteraction samplePayloads/ConfigureInteractionRequest_MattRequest.json samplePayloads/ConfigureInteractionResponse_MattRequest.json
@@ -157,7 +190,7 @@ start_exe_and_test() {
     kill $_pid || true
 }
 
-PORT=${PORT:-"50051"} 
+PORT=${PORT:-"50051"}
 PACT_PLUGIN_DIR=${PACT_PLUGIN_DIR:-"~/.pact/plugins"}
 PLUGIN_EXECUTABLE=${PLUGIN_EXECUTABLE:-"PactPluginServer"}
 PLUGIN_EXECUTABLE_DIR=${PLUGIN_EXECUTABLE_DIR:-"pact-plugin-template-xyz"}
