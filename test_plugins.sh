@@ -116,10 +116,10 @@ run_test_server() {
     echo "entering" "$PLUGIN_EXECUTABLE_DIR"
     cd "$PLUGIN_EXECUTABLE_DIR" || exit
     echo "testing" "$PLUGIN_EXECUTABLE"
-    ./"$PLUGIN_EXECUTABLE" &
+    PORT=${PORT:-"50051"} ./"$PLUGIN_EXECUTABLE" &
     _pid=$!
     sleep 3
-    LISTENING_PORT=$(lsof -aPi -p$_pid -Fn | grep -e n -m1 | cut -d ":" -f2)
+    LISTENING_PORT=$(lsof -aPi -p$_pid -Fn | grep -e n -m1 | cut -d ":" -f2) || echo "cant get listening port"
     PORT=${LISTENING_PORT:-PORT}
     echo "LISTENING_PORT:$LISTENING_PORT"
     echo "PROJECT:$PLUGIN_EXECUTABLE"
@@ -157,7 +157,7 @@ start_exe_and_test() {
     kill $_pid || true
 }
 
-PORT=${PORT:-"50051"}
+PORT=${PORT:-"50051"} 
 PACT_PLUGIN_DIR=${PACT_PLUGIN_DIR:-"~/.pact/plugins"}
 PLUGIN_EXECUTABLE=${PLUGIN_EXECUTABLE:-"PactPluginServer"}
 PLUGIN_EXECUTABLE_DIR=${PLUGIN_EXECUTABLE_DIR:-"pact-plugin-template-xyz"}

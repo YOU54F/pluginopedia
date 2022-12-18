@@ -19,7 +19,7 @@ const randomUUID = require('crypto').randomUUID;
 
 // import { ServerMessage } from './proto/example_package/ServerMessage';
 
-const host = '0.0.0.0:9090';
+
 // @ts-ignore
 const pactPluginServer: PactPluginHandlers = {
   initPlugin(
@@ -143,7 +143,8 @@ function getServer(): grpc.Server {
 if (require.main === module) {
   const server = getServer();
   const serverKey = randomUUID();
-
+  const port = process.env.PORT ? Number(process.env.PORT) : 50051
+  const host = ['0.0.0.0',port].join(":");
   server.bindAsync(
     host,
     grpc.ServerCredentials.createInsecure(),

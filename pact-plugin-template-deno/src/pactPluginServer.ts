@@ -278,7 +278,7 @@ const main = async () => {
   cl.info(`Deno Pact Plugin is alive`);
   const port: number = Deno.env.get("PORT")
     ? Number(Deno.env.get("PORT"))
-    : (await getAvailablePort()) ?? 50052;
+    : (await getAvailablePort()) ?? 50051;
   console.log(JSON.stringify({ port, serverKey: crypto.randomUUID() }));
   const gRPCServer = Deno.listen({ port });
   Deno.addSignalListener("SIGINT", () => {

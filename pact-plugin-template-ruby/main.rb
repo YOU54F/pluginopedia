@@ -152,7 +152,7 @@ def main
   # server = TCPServer.new('127.0.0.1', 0)
   # port = server.addr[1]
   # server.close()
-  port = 50_051
+  port = ENV["PORT"] || 50051
   # pp port
   host = "0.0.0.0:#{port}"
   server_key = SecureRandom.uuid
