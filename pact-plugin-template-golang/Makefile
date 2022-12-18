@@ -9,7 +9,10 @@ PROJECT=golang-template
 ci:: deps clean bin test
 
 bin: write_config
-	go build -o build/$(PROJECT)
+	go build -o build/$(PROJECT) && make cp_bin
+
+cp_bin:
+	cp build/$(PROJECT) $(PROJECT)
 
 clean:
 	rm -rf build dist
