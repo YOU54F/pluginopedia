@@ -127,7 +127,10 @@ jobs:
       - uses: actions/checkout@v3
       - run: ls
       - run: pwd
-      - uses: fwilhe2/setup-kotlin@main
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
       - run: make compile
       - name: Install evans
         uses: jaxxstorm/action-install-gh-release@v1.9.0
@@ -270,6 +273,7 @@ jobs:
       - run: make test
   pact-dart:
     timeout-minutes: 10
+    needs: dart
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -302,6 +306,7 @@ jobs:
           make pact_test
   pact-deno:
     timeout-minutes: 10
+    needs: deno
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -336,6 +341,7 @@ jobs:
           make pact_test
   pact-dotnet:
     timeout-minutes: 10
+    needs: dotnet
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -371,6 +377,7 @@ jobs:
           make pact_test
   pact-golang:
     timeout-minutes: 10
+    needs: golang
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -405,6 +412,7 @@ jobs:
           make pact_test
   pact-kotlin:
     timeout-minutes: 10
+    needs: kotlin
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -419,7 +427,10 @@ jobs:
       - uses: actions/checkout@v3
       - run: ls
       - run: pwd
-      - uses: fwilhe2/setup-kotlin@main
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
       - run: make compile
       - name: Install evans
         uses: jaxxstorm/action-install-gh-release@v1.9.0
@@ -437,6 +448,7 @@ jobs:
           make pact_test
   pact-node:
     timeout-minutes: 10
+    needs: node
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -472,6 +484,7 @@ jobs:
           make pact_test
   pact-python:
     timeout-minutes: 10
+    needs: python
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -506,6 +519,7 @@ jobs:
           make pact_test
   pact-ruby:
     timeout-minutes: 10
+    needs: ruby
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -540,6 +554,7 @@ jobs:
           make pact_test
   pact-rust:
     timeout-minutes: 10
+    needs: rust
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -574,6 +589,7 @@ jobs:
           make pact_test
   pact-swift:
     timeout-minutes: 10
+    needs: swift
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
