@@ -17,7 +17,7 @@ compile:
 	@case $$TARGET in \
 		"deno")\
 		cd pact-plugin-template-deno && \
-		deno compile --allow-all --unstable src/PactPluginServer.ts \
+		deno compile --allow-all --unstable src/pactPluginServer.ts \
 		;;\
 		"dart")\
 		cd pact-plugin-template-dart && \
