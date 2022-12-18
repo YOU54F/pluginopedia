@@ -44,7 +44,7 @@ dependencies {
     implementation 'org.apache.tika:tika-core:1.27'
 
     // You'll need to change the location, if you move your proto
-    protobuf files('../plugin.proto')
+    protobuf files('plugin.proto')
 
     testImplementation "org.codehaus.groovy:groovy:3.0.8"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
