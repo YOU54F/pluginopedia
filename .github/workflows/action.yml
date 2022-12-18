@@ -116,8 +116,8 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        # os: [ubuntu-latest, windows-latest, macos-latest]  # need to enable binaries in gradle
-        os: [macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest]  # need to enable binaries in gradle
+        # os: [macos-latest]
       fail-fast: false
     runs-on: ${{ matrix.os }}
     defaults:
