@@ -1,4 +1,4 @@
-#!/usr/bin/env /Users/saf/.pyenv/shims/python
+#!/usr/bin/env python
 import sys
 import grpc
 from concurrent import futures

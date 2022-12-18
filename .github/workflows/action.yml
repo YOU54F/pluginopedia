@@ -6,6 +6,7 @@ on:
 
 env:
   PORT: 50051
+  pact_do_not_track: true
  
 jobs:
   dart:
@@ -115,7 +116,8 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        # os: [ubuntu-latest, windows-latest, macos-latest]  # need to enable binaries in gradle
+        os: [macos-latest]
       fail-fast: false
     runs-on: ${{ matrix.os }}
     defaults:
@@ -218,37 +220,38 @@ jobs:
           repo: ktr0731/evans
           tag: v0.10.9
       - run: make test
-  rust:
-    timeout-minutes: 10
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      TARGET: rust
-    steps:
-      - uses: actions/checkout@v3
-      - run: ls
-      - run: pwd
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - run: make compile
-      - name: Install evans
-        uses: jaxxstorm/action-install-gh-release@v1.9.0
-        with:
-          repo: ktr0731/evans
-          tag: v0.10.9
-      - run: make test
+  # rust:
+  #   timeout-minutes: 10
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     TARGET: rust
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - run: ls
+  #     - run: pwd
+  #     - uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: stable
+  #     - run: make compile
+  #     - name: Install evans
+  #       uses: jaxxstorm/action-install-gh-release@v1.9.0
+  #       with:
+  #         repo: ktr0731/evans
+  #         tag: v0.10.9
+  #     - run: make test
   swift:
     timeout-minutes: 10
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest]
+        # os: [ubuntu-latest, windows-latest, macos-latest] # swift build error: unknown or missing subcommand 'swift-build.exe'
       fail-fast: false
     runs-on: ${{ matrix.os }}
     defaults:
@@ -553,41 +556,41 @@ jobs:
         run: |
           export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE
           make pact_test
-  pact-rust:
-    timeout-minutes: 10
-    needs: rust
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-      fail-fast: false
-    runs-on: ${{ matrix.os }}
-    defaults:
-      run:
-        shell: bash
-    env:
-      TARGET: rust
-    steps:
-      - uses: actions/checkout@v3
-      - run: ls
-      - run: pwd
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - run: make compile
-      - name: Install evans
-        uses: jaxxstorm/action-install-gh-release@v1.9.0
-        with:
-          repo: ktr0731/evans
-          tag: v0.10.9
-      - run: make test
-      - if: runner.os != 'Windows'
-        run: |
-          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE
-          make pact_test
-      - if: runner.os == 'Windows'
-        run: |
-          export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE
-          make pact_test
+  # pact-rust:
+  #   timeout-minutes: 10
+  #   needs: rust
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest, macos-latest]
+  #     fail-fast: false
+  #   runs-on: ${{ matrix.os }}
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   env:
+  #     TARGET: rust
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - run: ls
+  #     - run: pwd
+  #     - uses: actions-rs/toolchain@v1
+  #       with:
+  #         toolchain: stable
+  #     - run: make compile
+  #     - name: Install evans
+  #       uses: jaxxstorm/action-install-gh-release@v1.9.0
+  #       with:
+  #         repo: ktr0731/evans
+  #         tag: v0.10.9
+  #     - run: make test
+  #     - if: runner.os != 'Windows'
+  #       run: |
+  #         export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE
+  #         make pact_test
+  #     - if: runner.os == 'Windows'
+  #       run: |
+  #         export PACT_PLUGIN_DIR=$GITHUB_WORKSPACE
+  #         make pact_test
   pact-swift:
     timeout-minutes: 10
     needs: swift
