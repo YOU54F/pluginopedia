@@ -154,7 +154,7 @@ health_check() {
             sleep 1
             ((COUNT++))
             echo "COUNT "$COUNT
-            break
+            # break
         fi
         if [[ $COUNT == 10 && $SERVER_STARTED != true ]]; then
             echo 'expired healthcheck'
