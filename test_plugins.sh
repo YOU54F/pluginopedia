@@ -120,7 +120,7 @@ run_test_server() {
     _pid=$!
     sleep 3
     LISTENING_PORT=$(lsof -aPi -p$_pid -Fn | grep -e n -m1 | cut -d ":" -f2) || echo "cant get listening port"
-    PORT=${LISTENING_PORT:-PORT}
+    PORT=${LISTENING_PORT:-$PORT}
     echo "LISTENING_PORT:$LISTENING_PORT"
     echo "PROJECT:$PLUGIN_EXECUTABLE"
     echo "PID:" $_pid
