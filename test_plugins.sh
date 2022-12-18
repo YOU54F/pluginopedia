@@ -141,7 +141,7 @@ health_check() {
         echo "SERVER_STARTED "$SERVER_STARTED
         echo "ERROR_FLAG "$ERROR_FLAG
         TestPlugin InitPlugin
-        if [[ $ERROR_FLAG == false ]]; then
+        if [[ $ERROR_FLAG == false || $response ]]; then
             SERVER_STARTED=true
             echo "SERVER_STARTED" $SERVER_STARTED
             ((COUNT++))
