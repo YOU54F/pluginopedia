@@ -25,7 +25,8 @@ import kotlinx.coroutines.*
 import mu.KLogging
 
 class PluginApp(
-    private val server: Server = ServerBuilder.forPort(0).addService(PactPluginService()).build(),
+    private val port: Int = if (System.getenv("PORT") is String) System.getenv("PORT").toInt() else 0,
+    private val server: Server = ServerBuilder.forPort(port).addService(PactPluginService()).build(),
     private val serverKey: String = randomUUID().toString()
 ) {
   fun start() {

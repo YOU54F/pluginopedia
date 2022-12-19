@@ -55,9 +55,11 @@ const pactPluginServer: PactPluginHandlers = {
     >,
     callback: grpc.sendUnaryData<ConfigureInteractionResponse>
   ) {
-    if (call.request) {
-      console.log(`(server) Got configureInteraction message:`, call.request);
-    }
+      // for some reason, logging out here causes the plugin pact tests to fail, 
+      // so print statements have been removed.
+    // if (call.request) {
+    //   console.log(`(server) Got configureInteraction message:`, call.request);
+    // }
 
     const contentsConfig = JSON.parse(
       JSON.stringify(call.request.contentsConfig?.fields)
@@ -67,7 +69,7 @@ const pactPluginServer: PactPluginHandlers = {
     const interactions: ConfigureInteractionResponse['interaction'] = [];
 
     if (contentsConfig.request) {
-      console.log(contentsConfig.request)
+      // console.log(contentsConfig.request)
       interactions.push({
         contents: {
           content: { value: new TextEncoder().encode(contentsConfig.request.structValue.fields.body.stringValue) },
@@ -77,7 +79,7 @@ const pactPluginServer: PactPluginHandlers = {
       });
     }
     if (contentsConfig.response) {
-      console.log(contentsConfig.response)
+      // console.log(contentsConfig.response)
       interactions.push({
         contents: {
           content: { value: new TextEncoder().encode(contentsConfig.response.structValue.fields.body.stringValue) },
