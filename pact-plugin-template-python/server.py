@@ -18,8 +18,8 @@ class PactPluginService(pb2_grpc.PactPluginServicer):
         print(request)
         # result = f'received InitPlugin "{request}"'
         result = {'catalogue': []}
-
-        return pb2.InitPluginResponse(**result)
+        response = pb2.InitPluginResponse
+        return response
 # {"port": 50051, "serverKey": "foo"}
 # {"port":9090,"serverKey":"3511862a-5854-4540-848e-0ea2316164de"}
 def serve():

@@ -73,11 +73,11 @@ test {
 }
 
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:3.18.1:osx-x86_64" } // enabled for M1 Mac users
-    // protoc { artifact = "com.google.protobuf:protoc:3.18.1" } // Uncomment this on other platforms
+    // protoc { artifact = "com.google.protobuf:protoc:3.18.1:osx-x86_64" } // enabled for M1 Mac users
+    protoc { artifact = "com.google.protobuf:protoc:3.18.1" } // Uncomment this on other platforms
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.40.1:osx-x86_64" } // enabled for M1 Mac users
-        // grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.40.1" } // Uncomment this on other platforms
+        // grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.40.1:osx-x86_64" } // enabled for M1 Mac users
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.40.1" } // Uncomment this on other platforms
         grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:1.1.0:jdk7@jar" }
     }
     generateProtoTasks {

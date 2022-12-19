@@ -118,8 +118,8 @@ const PactPluginService: PactPlugin = {
   CompareContents(
     request: CompareContentsRequest
   ): Promise<CompareContentsResponse> {
-      // for some reason, logging out here causes the plugin pact tests to fail, 
-      // so print statements have been removed.
+    // for some reason, logging out here causes the plugin pact tests to fail,
+    // so print statements have been removed.
     // cl.info("CompareContents");
     // cl.info(request);
 
@@ -159,8 +159,8 @@ const PactPluginService: PactPlugin = {
   ConfigureInteraction(
     request: ConfigureInteractionRequest
   ): Promise<ConfigureInteractionResponse> {
-          // for some reason, logging out here causes the plugin pact tests to fail, 
-      // so print statements have been removed.
+    // for some reason, logging out here causes the plugin pact tests to fail,
+    // so print statements have been removed.
     // cl.info("ConfigureInteraction", request);
     // cl.info(request);
     // @ts-ignore
@@ -284,7 +284,9 @@ const main = async () => {
     ? Number(Deno.env.get("PORT"))
     : (await getAvailablePort()) ?? 50051;
   console.log(JSON.stringify({ port, serverKey: crypto.randomUUID() }));
-  const gRPCServer = Deno.listen({hostname:"[::1]", port });
+
+  // const hostname = Deno.build.os === "darwin" ? "[::1]" : "0.0.0.0";
+  const gRPCServer = Deno.listen({ hostname:"0.0.0.0", port });
   Deno.addSignalListener("SIGINT", () => {
     cl.info("got sigint!");
     // fileHandler.flush();
