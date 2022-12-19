@@ -284,7 +284,7 @@ const main = async () => {
     ? Number(Deno.env.get("PORT"))
     : (await getAvailablePort()) ?? 50051;
   console.log(JSON.stringify({ port, serverKey: crypto.randomUUID() }));
-  const gRPCServer = Deno.listen({ port });
+  const gRPCServer = Deno.listen({hostname:"[::1]", port });
   Deno.addSignalListener("SIGINT", () => {
     cl.info("got sigint!");
     // fileHandler.flush();

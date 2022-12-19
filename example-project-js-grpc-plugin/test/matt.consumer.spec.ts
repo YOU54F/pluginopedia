@@ -17,7 +17,7 @@ describe("Plugins - grpc Protocol", () => {
       spec: SpecificationVersion.SPECIFICATION_VERSION_V4,
       logLevel: (process.env.LOG_LEVEL as LogLevel) || "error"
     });
-    const HOST = "0.0.0.0"
+    const HOST = "[::1]"
     describe("with grpc protocol", async () => {
       it("generates a pact with success", () => {
         const grpcMessage = `{

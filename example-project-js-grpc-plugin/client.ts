@@ -16,7 +16,7 @@ export const client = (host: string) => {
 };
 const deadline = new Date();
 deadline.setSeconds(deadline.getSeconds() + 5);
-const grpClient = client("0.0.0.0:9090");
+const grpClient = client("[::1]:9090");
 grpClient.waitForReady(deadline, (error?: Error) => {
   if (error) {
     console.log(`Client connect error: ${error.message}`);

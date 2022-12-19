@@ -5,7 +5,7 @@ import { bindServer, getServer } from "../provider";
 
 describe("Plugins", () => {
   const PORT = 50051;
-  const HOST = "0.0.0.0";
+  const HOST = "[::1]";
 
   describe("Verification", () => {
     describe("with MATT protocol", () => {

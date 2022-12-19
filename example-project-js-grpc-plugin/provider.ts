@@ -6,7 +6,7 @@ import { MessageOut } from "./proto/MessageOut";
 import { TestHandlers } from "./proto/Test";
 import { MessageIn } from "./proto/MessageIn";
 
-const HOST = '0.0.0.0:9090';
+const HOST = '[::1]:9090';
 
 const exampleServer: TestHandlers = {
   GetTest(

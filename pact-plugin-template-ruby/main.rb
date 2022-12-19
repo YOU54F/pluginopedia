@@ -21,7 +21,7 @@ class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
   #   value :INTERACTION, 4
   # end
   def init_plugin(init_plugin_req, _unused_call)
-    puts "Received InitPluginRequest: #{init_plugin_req}"
+    # puts "Received InitPluginRequest: #{init_plugin_req}"
     content_matcher_req = [{
       'key' => 'foo',
       'type' => 0,
@@ -32,13 +32,13 @@ class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
 
   def update_catalogue(update_catalogue_req, _unused_call)
     catalogue_req = update_catalogue_req.to_h
-    puts "Received Updated Catalogue: #{JSON.pretty_generate(catalogue_req[:catalogue])}"
+    # puts "Received Updated Catalogue: #{JSON.pretty_generate(catalogue_req[:catalogue])}"
     Google::Protobuf::Empty.new
   end
 
   def compare_contents(compare_contents_req, _unused_call)
     compare_contents = compare_contents_req.to_h
-    puts "Received compare_contents_req: #{JSON.pretty_generate(compare_contents)}"
+    # puts "Received compare_contents_req: #{JSON.pretty_generate(compare_contents)}"
     actual = compare_contents[:actual][:content][:value]
     expected = compare_contents[:expected][:content][:value]
     if actual != expected
@@ -70,14 +70,14 @@ class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
   # TODO
   # Request to configure/setup the interaction for later verification. Data returned will be persisted in the pact file.
   def configure_interaction(configure_interaction_req, _unused_call)
-    print "Received configure_interaction_req: #{JSON.pretty_generate(configure_interaction_req.to_h)}"
+    # print "Received configure_interaction_req: #{JSON.pretty_generate(configure_interaction_req.to_h)}"
     contents_config = configure_interaction_req.to_h
-    puts contents_config[:contentsConfig][:fields]
+    # puts contents_config[:contentsConfig][:fields]
     interactions = []
 
     if contents_config[:contentsConfig][:fields]['request']
-      pp 'got a request interaction'
-      puts contents_config[:contentsConfig][:fields][:request]
+      # pp 'got a request interaction'
+      # puts contents_config[:contentsConfig][:fields][:request]
       request_body = contents_config[:contentsConfig][:fields]['request'][:struct_value][:fields]['body'][:string_value]
       interactions.push(Io::Pact::Plugin::InteractionResponse.new(contents: {
                                                                     contentType: 'application/foo',
@@ -86,8 +86,8 @@ class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
                                                                   partName: 'request'))
     end
     if contents_config[:contentsConfig][:fields]['response']
-      pp 'got a response interaction'
-      puts contents_config[:contentsConfig][:fields][:response]
+      # pp 'got a response interaction'
+      # puts contents_config[:contentsConfig][:fields][:response]
       response_body = contents_config[:contentsConfig][:fields]['response'][:struct_value][:fields]['body'][:string_value]
       interactions.push(Io::Pact::Plugin::InteractionResponse.new(contents: {
                                                                     contentType: 'application/foo',
@@ -102,14 +102,14 @@ class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
   # construct your buff strings https://onlinestringtools.com/convert-string-to-decimal
   def generate_content(generate_content_req, _unused_call)
     generate_content = generate_content_req.to_h
-    puts "Received GenerateContent request: #{JSON.pretty_generate(generate_content)}"
+    # puts "Received GenerateContent request: #{JSON.pretty_generate(generate_content)}"
     # generators = generate_content[:generators]
     # plugin_configuration = generate_content[:pluginConfiguration]
     content = generate_content[:contents][:content]
     return unless content[:value]
 
     response_body = content[:value]
-    puts "Returning GenerateContent response: #{JSON.pretty_generate(response_body)}"
+    # puts "Returning GenerateContent response: #{JSON.pretty_generate(response_body)}"
     Io::Pact::Plugin::GenerateContentResponse.new(contents: {
                                                     contentType: 'application/foo',
                                                     content: Google::Protobuf::BytesValue.new(value: response_body)
@@ -118,31 +118,31 @@ class PactRubyPluginServer < Io::Pact::Plugin::PactPlugin::Service
 
   # TODO
   def start_mock_server(_start_mock_server_req, _unused_call)
-    print "Received start_mock_server_req: #{JSON.pretty_generate(start_mock_server.to_h)}"
+    # print "Received start_mock_server_req: #{JSON.pretty_generate(start_mock_server.to_h)}"
     Io::Pact::Plugin::StartMockServerResponse.new
   end
 
   # TODO
   def shutdown_mock_server(shutdown_mock_server_req, _unused_call)
-    print "Received shutdown_mock_server_req: #{JSON.pretty_generate(shutdown_mock_server_req.to_h)}"
+    # print "Received shutdown_mock_server_req: #{JSON.pretty_generate(shutdown_mock_server_req.to_h)}"
     Io::Pact::Plugin::ShutdownMockServerResponse.new
   end
 
   # TODO
   def get_mock_server_results(get_mock_server_results_req, _unused_call)
-    print "Received get_mock_server_results_req: #{JSON.pretty_generate(get_mock_server_results_req.to_h)}"
+    # print "Received get_mock_server_results_req: #{JSON.pretty_generate(get_mock_server_results_req.to_h)}"
     Io::Pact::Plugin::MockServerResults.new
   end
 
   # TODO
   def prepare_interaction_for_verification(prepare_interaction_for_verification_req, _unused_call)
-    print "Received prepare_interaction_for_verification: #{JSON.pretty_generate(prepare_interaction_for_verification_req.to_h)}"
+    # print "Received prepare_interaction_for_verification: #{JSON.pretty_generate(prepare_interaction_for_verification_req.to_h)}"
     Io::Pact::Plugin::VerificationPreparationResponse.new
   end
 
   # TODO
   def verify_interaction_response(verify_interaction_response_req, _unused_call)
-    print "Received get_mock_server_results_req: #{JSON.pretty_generate(verify_interaction_response_req.to_h)}"
+    # print "Received get_mock_server_results_req: #{JSON.pretty_generate(verify_interaction_response_req.to_h)}"
     Io::Pact::Plugin::VerifyInteractionResponse.new
   end
 end
@@ -154,7 +154,7 @@ def main
   # server.close()
   port = ENV["PORT"] || 50051
   # pp port
-  host = "0.0.0.0:#{port}"
+  host = "[::1]:#{port}"
   server_key = SecureRandom.uuid
   s = GRPC::RpcServer.new
   s.add_http2_port(host, :this_port_is_insecure)

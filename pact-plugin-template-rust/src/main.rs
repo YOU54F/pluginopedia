@@ -352,7 +352,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
   let env = Env::new().filter("LOG_LEVEL");
   env_logger::init_from_env(env);
 
-  let addr: SocketAddr = "0.0.0.0:0".parse()?;
+  let addr: SocketAddr = "[::1]".parse()?;
   let listener = TcpListener::bind(addr).await?;
   let address = listener.local_addr()?;
 
