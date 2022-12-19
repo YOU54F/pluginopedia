@@ -29,10 +29,7 @@
     func initPlugin(request: Io_Pact_Plugin_InitPluginRequest, context: StatusOnlyCallContext)
       -> EventLoopFuture<Io_Pact_Plugin_InitPluginResponse>
     {
-      print("initPlugin:")
-      print(request)
-
-      return context.eventLoop.makeSucceededFuture(
+       return context.eventLoop.makeSucceededFuture(
         Io_Pact_Plugin_InitPluginResponse.with {
           $0.catalogue =
             [
@@ -50,16 +47,14 @@
     func updateCatalogue(request: Io_Pact_Plugin_Catalogue, context: StatusOnlyCallContext)
       -> EventLoopFuture<Google_Protobuf_Empty>
     {
-      print("updateCatalogue:")
-      print(request)
       return context.eventLoop.makeSucceededFuture(Google_Protobuf_Empty())
     }
 
     func compareContents(
       request: Io_Pact_Plugin_CompareContentsRequest, context: StatusOnlyCallContext
     ) -> EventLoopFuture<Io_Pact_Plugin_CompareContentsResponse> {
-      print("compareContents:")
-      print(request)
+      // for some reason, logging out here causes the plugin pact tests to fail, 
+      // so print statements have been removed.
       let actual = request.actual.content.value
       let expected = request.expected.content.value
 
@@ -84,14 +79,11 @@
         return context.eventLoop.makeSucceededFuture(Io_Pact_Plugin_CompareContentsResponse())
 
       }
-      // TODO
     }
 
     func configureInteraction(
       request: Io_Pact_Plugin_ConfigureInteractionRequest, context: StatusOnlyCallContext
     ) -> EventLoopFuture<Io_Pact_Plugin_ConfigureInteractionResponse> {
-      print("configureInteraction:")
-      // print(request)
       var interactions: Io_Pact_Plugin_ConfigureInteractionResponse =
         Io_Pact_Plugin_ConfigureInteractionResponse.init()
       if request.contentsConfig.fields.keys.contains("request") {
@@ -118,9 +110,6 @@
     func generateContent(
       request: Io_Pact_Plugin_GenerateContentRequest, context: StatusOnlyCallContext
     ) -> EventLoopFuture<Io_Pact_Plugin_GenerateContentResponse> {
-      print("generateContent:")
-      print(request)
-      // TODO
 
       return context.eventLoop.makeSucceededFuture(Io_Pact_Plugin_GenerateContentResponse())
     }
@@ -128,45 +117,34 @@
     func startMockServer(
       request: Io_Pact_Plugin_StartMockServerRequest, context: StatusOnlyCallContext
     ) -> EventLoopFuture<Io_Pact_Plugin_StartMockServerResponse> {
-      print("startMockServer:")
-      print(request)
-      // TODO
+
       return context.eventLoop.makeSucceededFuture(Io_Pact_Plugin_StartMockServerResponse())
     }
 
     func shutdownMockServer(
       request: Io_Pact_Plugin_ShutdownMockServerRequest, context: StatusOnlyCallContext
     ) -> EventLoopFuture<Io_Pact_Plugin_ShutdownMockServerResponse> {
-      print("shutdownMockServer:")
-      print(request)
-      // TODO
+
       return context.eventLoop.makeSucceededFuture(Io_Pact_Plugin_ShutdownMockServerResponse())
     }
 
     func getMockServerResults(
       request: Io_Pact_Plugin_MockServerRequest, context: StatusOnlyCallContext
     ) -> EventLoopFuture<Io_Pact_Plugin_MockServerResults> {
-      print("getMockServerResults:")
-      print(request)
-      // TODO
+
       return context.eventLoop.makeSucceededFuture(Io_Pact_Plugin_MockServerResults())
     }
 
     func prepareInteractionForVerification(
       request: Io_Pact_Plugin_VerificationPreparationRequest, context: StatusOnlyCallContext
     ) -> EventLoopFuture<Io_Pact_Plugin_VerificationPreparationResponse> {
-      print("prepareInteractionForVerification:")
-      print(request)
-      // TODO
+
       return context.eventLoop.makeSucceededFuture(Io_Pact_Plugin_VerificationPreparationResponse())
     }
 
     func verifyInteraction(
       request: Io_Pact_Plugin_VerifyInteractionRequest, context: StatusOnlyCallContext
     ) -> EventLoopFuture<Io_Pact_Plugin_VerifyInteractionResponse> {
-      print("verifyInteraction:")
-      print(request)
-      // TODO
       return context.eventLoop.makeSucceededFuture(Io_Pact_Plugin_VerifyInteractionResponse())
     }
   }

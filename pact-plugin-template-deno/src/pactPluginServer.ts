@@ -70,8 +70,8 @@ const PactPluginService: PactPlugin = {
   //   INTERACTION = 4;
   // }
   InitPlugin(request: InitPluginRequest): Promise<InitPluginResponse> {
-    cl.info("InitPlugin");
-    cl.info(request);
+    // cl.info("InitPlugin");
+    // cl.info(request);
     const response: InitPluginResponse = {
       catalogue: [
         {
@@ -102,29 +102,31 @@ const PactPluginService: PactPlugin = {
         // }
       ]
     };
-    cl.info("InitPluginResponse");
-    cl.info(response);
+    // cl.info("InitPluginResponse");
+    // cl.info(response);
 
     // fileHandler.flush()
     return Promise.resolve(response);
   },
 
   UpdateCatalogue(request: Catalogue): Promise<Empty> {
-    cl.info("UpdateCatalogue");
-    cl.info(request);
+    // cl.info("UpdateCatalogue");
+    // cl.info(request);
     return Promise.resolve({});
   },
 
   CompareContents(
     request: CompareContentsRequest
   ): Promise<CompareContentsResponse> {
-    cl.info("CompareContents");
-    cl.info(request);
+      // for some reason, logging out here causes the plugin pact tests to fail, 
+      // so print statements have been removed.
+    // cl.info("CompareContents");
+    // cl.info(request);
 
     const actual = new TextDecoder().decode(request.actual?.content?.value);
     const expected = new TextDecoder().decode(request.expected?.content?.value);
-    cl.info("expected", expected);
-    cl.info("actual", actual);
+    // cl.info("expected", expected);
+    // cl.info("actual", actual);
     if (actual !== expected) {
       // @ts-ignore
       return Promise.resolve({
@@ -157,12 +159,14 @@ const PactPluginService: PactPlugin = {
   ConfigureInteraction(
     request: ConfigureInteractionRequest
   ): Promise<ConfigureInteractionResponse> {
-    cl.info("ConfigureInteraction", request);
+          // for some reason, logging out here causes the plugin pact tests to fail, 
+      // so print statements have been removed.
+    // cl.info("ConfigureInteraction", request);
     // cl.info(request);
     // @ts-ignore
-    cl.info("request", request.contentsConfig?.fields["request"]);
+    // cl.info("request", request.contentsConfig?.fields["request"]);
     // @ts-ignore
-    cl.info("response", request.contentsConfig?.fields["response"]);
+    // cl.info("response", request.contentsConfig?.fields["response"]);
     const interaction: InteractionResponse[] = [];
     // @ts-ignore
     if (request.contentsConfig?.fields["request"]) {
@@ -184,7 +188,7 @@ const PactPluginService: PactPlugin = {
         partName: "response"
       });
     }
-    console.log("returning interaction", interaction);
+    // console.log("returning interaction", interaction);
 
     return Promise.resolve({
       interaction
@@ -194,8 +198,8 @@ const PactPluginService: PactPlugin = {
   GenerateContent(
     request: GenerateContentRequest
   ): Promise<GenerateContentResponse> {
-    cl.info("GenerateContent");
-    cl.info(request);
+    // cl.info("GenerateContent");
+    // cl.info(request);
     // fileHandler.flush();
     return Promise.resolve({
       // contents: {
@@ -208,8 +212,8 @@ const PactPluginService: PactPlugin = {
   StartMockServer(
     request: StartMockServerRequest
   ): Promise<StartMockServerResponse> {
-    cl.info("StartMockServer");
-    cl.info(request);
+    // cl.info("StartMockServer");
+    // cl.info(request);
     // fileHandler.flush();
 
     return Promise.resolve({
@@ -222,8 +226,8 @@ const PactPluginService: PactPlugin = {
   ShutdownMockServer(
     request: ShutdownMockServerRequest
   ): Promise<ShutdownMockServerResponse> {
-    cl.info("ShutdownMockServer");
-    cl.info(request);
+    // cl.info("ShutdownMockServer");
+    // cl.info(request);
     // fileHandler.flush();
     return Promise.resolve({
       ok: true,
@@ -243,8 +247,8 @@ const PactPluginService: PactPlugin = {
   PrepareInteractionForVerification(
     request: VerificationPreparationRequest
   ): Promise<VerificationPreparationResponse> {
-    cl.info("PrepareInteractionForVerification");
-    cl.info(request);
+    // cl.info("PrepareInteractionForVerification");
+    // cl.info(request);
     return Promise.resolve({
       // error: "error",
       interactionData: { body: {}, metadata: {} }
@@ -254,8 +258,8 @@ const PactPluginService: PactPlugin = {
   VerifyInteraction(
     request: VerifyInteractionRequest
   ): Promise<VerifyInteractionResponse> {
-    cl.info("VerifyInteraction");
-    cl.info(request);
+    // cl.info("VerifyInteraction");
+    // cl.info(request);
     return Promise.resolve({
       // error: "error",
       result: {
