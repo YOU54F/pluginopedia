@@ -266,8 +266,8 @@ jobs:
       - uses: compnerd/gha-setup-swift@main
         if: runner.os == 'Windows'
         with:
-          branch: swift-5.7.1-development
-          tag: 5.7.1-DEVELOPMENT
+          branch: swift-development
+          tag: 5.5-DEVELOPMENT-SNAPSHOT-2022-12-12-a
       - run: make compile
       - name: Install evans
         uses: jaxxstorm/action-install-gh-release@v1.9.0
@@ -612,8 +612,8 @@ jobs:
       - uses: compnerd/gha-setup-swift@main
         if: runner.os == 'Windows'
         with:
-          branch: swift-5.7.1-development
-          tag: 5.7.1-DEVELOPMENT
+          branch: swift-development
+          tag: 5.5-DEVELOPMENT-SNAPSHOT-2022-12-12-a
       - run: make compile
       - name: Install evans
         uses: jaxxstorm/action-install-gh-release@v1.9.0
