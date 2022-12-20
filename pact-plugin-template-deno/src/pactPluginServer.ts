@@ -55,7 +55,7 @@ import {
 // });
 
 // const cl = getLogger();
-const cl = console;
+// const cl = console;
 const PactPluginService: PactPlugin = {
   // enum EntryType {
   //   // Matcher for contents of messages, requests or response bodies
@@ -236,8 +236,8 @@ const PactPluginService: PactPlugin = {
   },
 
   GetMockServerResults(request: MockServerRequest): Promise<MockServerResults> {
-    cl.info("GetMockServerResults");
-    cl.info(request);
+    // cl.info("GetMockServerResults");
+    // cl.info(request);
     return Promise.resolve({
       ok: true,
       results: [{ path: "path", mismatches: [] }]
@@ -279,16 +279,16 @@ server.addService<PactPlugin>(new TextDecoder().decode(protoFile), {
 });
 
 const main = async () => {
-  cl.info(`Deno Pact Plugin is alive`);
+  // cl.info(`Deno Pact Plugin is alive`);
   const port: number = Deno.env.get("PORT")
     ? Number(Deno.env.get("PORT"))
     : (await getAvailablePort()) ?? 50051;
   console.log(JSON.stringify({ port, serverKey: crypto.randomUUID() }));
 
   // const hostname = Deno.build.os === "darwin" ? "[::1]" : "0.0.0.0";
-  const gRPCServer = Deno.listen({ hostname:"0.0.0.0", port });
+  const gRPCServer = Deno.listen({ hostname:"[::1]", port });
   Deno.addSignalListener("SIGINT", () => {
-    cl.info("got sigint!");
+    // cl.info("got sigint!");
     // fileHandler.flush();
     gRPCServer.close();
     Deno.exit();

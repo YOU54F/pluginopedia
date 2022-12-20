@@ -250,8 +250,8 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        # os: [ubuntu-latest, windows-latest, macos-latest] # swift build error: unknown or missing subcommand 'swift-build.exe'
+        # os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest, macos-latest] 
       fail-fast: false
     runs-on: ${{ matrix.os }}
     defaults:
@@ -266,8 +266,8 @@ jobs:
       - uses: compnerd/gha-setup-swift@main
         if: runner.os == 'Windows'
         with:
-          branch: swift-5.7.1-release
-          tag: 5.7.1-RELEASE
+          branch: swift-5.7.1-development
+          tag: 5.7.1-DEVELOPMENT
       - run: make compile
       - name: Install evans
         uses: jaxxstorm/action-install-gh-release@v1.9.0
@@ -612,8 +612,8 @@ jobs:
       - uses: compnerd/gha-setup-swift@main
         if: runner.os == 'Windows'
         with:
-          branch: swift-5.7.1-release
-          tag: 5.7.1-RELEASE
+          branch: swift-5.7.1-development
+          tag: 5.7.1-DEVELOPMENT
       - run: make compile
       - name: Install evans
         uses: jaxxstorm/action-install-gh-release@v1.9.0
