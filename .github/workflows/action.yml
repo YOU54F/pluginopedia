@@ -267,7 +267,7 @@ jobs:
         if: runner.os == 'Windows'
         with:
           branch: swift-development
-          tag: swift-DEVELOPMENT-SNAPSHOT-2022-12-12-a
+          tag: DEVELOPMENT-SNAPSHOT-2022-12-12-a
       - run: make compile
       - name: Install evans
         uses: jaxxstorm/action-install-gh-release@v1.9.0
@@ -613,7 +613,7 @@ jobs:
         if: runner.os == 'Windows'
         with:
           branch: swift-development
-          tag: swift-DEVELOPMENT-SNAPSHOT-2022-12-12-a
+          tag: DEVELOPMENT-SNAPSHOT-2022-12-12-a
       - run: make compile
       - name: Install evans
         uses: jaxxstorm/action-install-gh-release@v1.9.0
