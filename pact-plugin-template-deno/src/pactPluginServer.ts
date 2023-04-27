@@ -24,7 +24,8 @@ import {
   VerifyInteractionResponse,
   Empty,
   BytesValue,
-  Struct
+  Struct,
+  InteractionResponse
 } from "./plugin_inlined.d.ts";
 import { getAvailablePort } from "https://deno.land/x/port/mod.ts";
 import { protoFile } from "./pluginProtoUint8Array.ts";
@@ -54,7 +55,7 @@ import {
 // });
 
 // const cl = getLogger();
-const cl = console
+// const cl = console;
 const PactPluginService: PactPlugin = {
   // enum EntryType {
   //   // Matcher for contents of messages, requests or response bodies
@@ -69,17 +70,17 @@ const PactPluginService: PactPlugin = {
   //   INTERACTION = 4;
   // }
   InitPlugin(request: InitPluginRequest): Promise<InitPluginResponse> {
-    cl.info("InitPlugin");
-    cl.info(request);
+    // cl.info("InitPlugin");
+    // cl.info(request);
     const response: InitPluginResponse = {
       catalogue: [
         {
           // @ts-ignore
           type: 0,
           // type: "CONTENT_MATCHER",
-          key: "matt",
-          values: { "content-types": "application/matt" }
-        },
+          key: "foo",
+          values: { "content-types": "application/foo" }
+        }
         // {
         //   // @ts-ignore
         //   type: 1,
@@ -101,135 +102,118 @@ const PactPluginService: PactPlugin = {
         // }
       ]
     };
-    cl.info("InitPluginResponse");
-    cl.info(response);
+    // cl.info("InitPluginResponse");
+    // cl.info(response);
 
     // fileHandler.flush()
     return Promise.resolve(response);
   },
 
   UpdateCatalogue(request: Catalogue): Promise<Empty> {
-    cl.info("UpdateCatalogue");
-    cl.info(request);
+    // cl.info("UpdateCatalogue");
+    // cl.info(request);
     return Promise.resolve({});
   },
 
   CompareContents(
     request: CompareContentsRequest
   ): Promise<CompareContentsResponse> {
-    cl.info("CompareContents");
-    cl.info(request);
-    // fileHandler.flush();
-    return Promise.resolve({
-      // error: "string",
-      // typeMismatch: { expected: "expected", actual: "actual" },
-      results: { mismatches: [] }
-    });
+    // for some reason, logging out here causes the plugin pact tests to fail,
+    // so print statements have been removed.
+    // cl.info("CompareContents");
+    // cl.info(request);
+
+    const actual = new TextDecoder().decode(request.actual?.content?.value);
+    const expected = new TextDecoder().decode(request.expected?.content?.value);
+    // cl.info("expected", expected);
+    // cl.info("actual", actual);
+    if (actual !== expected) {
+      // @ts-ignore
+      return Promise.resolve({
+        error: "actual does not meet expected",
+        typeMismatch: {
+          actual,
+          expected
+        },
+        results: {
+          $: {
+            mismatches: [
+              {
+                diff: "diff",
+                actual: { value: request.actual?.content?.value }, // actual and expected are not being set
+                expected: { value: request.expected?.content?.value },
+                mismatch:
+                  "expected body hello is not equal to actual body world",
+                path: "$"
+                // "results":{"$":{"mismatches":[{"actual":null,"diff":"diff","expected":null,"mismatch":"expected body hello is not equal to actual body world","path":"$"}]}},"typeMismatch":{"actual":"world"}}
+              }
+            ]
+          }
+        }
+      });
+    } else {
+      return Promise.resolve({});
+    }
   },
 
   ConfigureInteraction(
     request: ConfigureInteractionRequest
   ): Promise<ConfigureInteractionResponse> {
-    cl.info("ConfigureInteraction",request);
+    // for some reason, logging out here causes the plugin pact tests to fail,
+    // so print statements have been removed.
+    // cl.info("ConfigureInteraction", request);
     // cl.info(request);
-    // // cl.info(request.contentsConfig?.fields?.stringValue)
-    // fileHandler.flush();
-    // cl.info(request.contentType);
-    // cl.info(request.contentsConfig?.fields?.stringValue);
-    // fileHandler.flush();
-
-    // const resp = ConfigureInteractionResponse
-    return Promise.resolve({
-      // interaction: []
-      interaction: [
-        {
-          contents: {
-            content: { value: new TextEncoder().encode("hello") },
-            contentType: "application/matt"
-          },
-          partName: "request",
-          // messageMetadata: { fields: { stringValue: "foo" } }
+    // @ts-ignore
+    // cl.info("request", request.contentsConfig?.fields["request"]);
+    // @ts-ignore
+    // cl.info("response", request.contentsConfig?.fields["response"]);
+    const interaction: InteractionResponse[] = [];
+    // @ts-ignore
+    if (request.contentsConfig?.fields["request"]) {
+      interaction.push({
+        contents: {
+          content: { value: new TextEncoder().encode("hello") },
+          contentType: "application/foo"
         },
-        // {
-        //   contents: {
-        //     content: { value: new TextEncoder().encode("world") },
-        //     contentType: "application/foo"
-        //   },
-        //   partName: "response"
-        // }
-      ]
-      // error: "error_string",
-      //     interaction: [
-      // {   contents:  {
-      //      "content": request.contentsConfig?.fields?.stringValue ?? 'foo',
-      //      "contentType": "application/json",
-      //      "contentTypeHint": "DEFAULT",
-      //      "encoded": false
-      //    }}
+        partName: "request"
+      });
+    }
+    // @ts-ignore
+    if (request.contentsConfig?.fields["response"]) {
+      interaction.push({
+        contents: {
+          content: { value: new TextEncoder().encode("world") },
+          contentType: "application/foo"
+        },
+        partName: "response"
+      });
+    }
+    // console.log("returning interaction", interaction);
 
-      // {
-      // "description": "an HTTP request to /matt",
-      // "key": "b6c5b973534175ec",
-      // "pending": false,
-      // "providerStates": [
-      //   {
-      //     "name": "the Matt protocol exists"
-      //   }
-      // ],
-      // "request": {
-      //   "body": {
-      //     "content": "MATThelloMATT",
-      //     "contentType": "application/matt",
-      //     "contentTypeHint": "DEFAULT",
-      //     "encoded": false
-      //   },
-      //   "headers": {
-      //     "content-type": [
-      //       "application/matt"
-      //     ]
-      //   },
-      //   "method": "POST",
-      //   "path": "/matt"
-      // },
-      // "response": {
-      //   "body": {
-      //     "content": "MATTworldMATT",
-      //     "contentType": "application/matt",
-      //     "contentTypeHint": "DEFAULT",
-      //     "encoded": false
-      //   },
-      //   "headers": {
-      //     "content-type": [
-      //       "application/matt"
-      //     ]
-      //   },
-      //   "status": 200
-      // },
-      // "type": "Synchronous/HTTP"
-      // }]
-      // pluginConfiguration: PluginConfiguration,
+    return Promise.resolve({
+      interaction
     });
   },
 
   GenerateContent(
     request: GenerateContentRequest
   ): Promise<GenerateContentResponse> {
-    cl.info("GenerateContent");
-    cl.info(request);
+    // cl.info("GenerateContent");
+    // cl.info(request);
     // fileHandler.flush();
     return Promise.resolve({
-      contents: {
-        content: { value: new TextEncoder().encode("foo") },
-        contentType: "application/foo"
-      }
+      // contents: {
+      //   content: { value: new TextEncoder().encode("foo") },
+      //   contentType: "application/foo"
+      // }
     });
   },
 
   StartMockServer(
     request: StartMockServerRequest
   ): Promise<StartMockServerResponse> {
-    cl.info("StartMockServer");
-    cl.info(request);
+    // cl.info("StartMockServer");
+    // cl.info(request);
     // fileHandler.flush();
 
     return Promise.resolve({
@@ -242,8 +226,8 @@ const PactPluginService: PactPlugin = {
   ShutdownMockServer(
     request: ShutdownMockServerRequest
   ): Promise<ShutdownMockServerResponse> {
-    cl.info("ShutdownMockServer");
-    cl.info(request);
+    // cl.info("ShutdownMockServer");
+    // cl.info(request);
     // fileHandler.flush();
     return Promise.resolve({
       ok: true,
@@ -252,8 +236,8 @@ const PactPluginService: PactPlugin = {
   },
 
   GetMockServerResults(request: MockServerRequest): Promise<MockServerResults> {
-    cl.info("GetMockServerResults");
-    cl.info(request);
+    // cl.info("GetMockServerResults");
+    // cl.info(request);
     return Promise.resolve({
       ok: true,
       results: [{ path: "path", mismatches: [] }]
@@ -263,8 +247,8 @@ const PactPluginService: PactPlugin = {
   PrepareInteractionForVerification(
     request: VerificationPreparationRequest
   ): Promise<VerificationPreparationResponse> {
-    cl.info("PrepareInteractionForVerification");
-    cl.info(request);
+    // cl.info("PrepareInteractionForVerification");
+    // cl.info(request);
     return Promise.resolve({
       // error: "error",
       interactionData: { body: {}, metadata: {} }
@@ -274,8 +258,8 @@ const PactPluginService: PactPlugin = {
   VerifyInteraction(
     request: VerifyInteractionRequest
   ): Promise<VerifyInteractionResponse> {
-    cl.info("VerifyInteraction");
-    cl.info(request);
+    // cl.info("VerifyInteraction");
+    // cl.info(request);
     return Promise.resolve({
       // error: "error",
       result: {
@@ -295,14 +279,16 @@ server.addService<PactPlugin>(new TextDecoder().decode(protoFile), {
 });
 
 const main = async () => {
-  cl.info(`Deno Pact Plugin is alive`);
+  // cl.info(`Deno Pact Plugin is alive`);
   const port: number = Deno.env.get("PORT")
     ? Number(Deno.env.get("PORT"))
-    : (await getAvailablePort()) ?? 50052;
+    : (await getAvailablePort()) ?? 50051;
   console.log(JSON.stringify({ port, serverKey: crypto.randomUUID() }));
-  const gRPCServer = Deno.listen({ port });
+
+  // const hostname = Deno.build.os === "darwin" ? "[::1]" : "0.0.0.0";
+  const gRPCServer = Deno.listen({ hostname:"[::1]", port });
   Deno.addSignalListener("SIGINT", () => {
-    cl.info("got sigint!");
+    // cl.info("got sigint!");
     // fileHandler.flush();
     gRPCServer.close();
     Deno.exit();
@@ -313,10 +299,9 @@ const main = async () => {
       server.handle(conn);
       // fileHandler.flush();
     }
-  }catch (e){
-    throw new Error(e)
+  } catch (e) {
+    throw new Error(e);
   }
-
 };
 
 await main();

@@ -1,14 +1,10 @@
 {
   "catalogue": [
     {
-      "key": "matt",
+      "key": "foo",
       "values": {
-        "content-types": "text/matt;application/matt"
+        "content-types": "application/foo"
       }
-    },
-    {
-      "key": "matt",
-      "type": "TRANSPORT"
     }
   ]
 }

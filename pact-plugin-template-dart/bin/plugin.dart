@@ -17,10 +17,10 @@ class PactPluginServer extends PactPluginServiceBase {
     log('Received InitPluginRequest: $request');
     var response = InitPluginResponse();
     response.catalogue.add(CatalogueEntry(
-        key: 'matt',
+        key: 'foo',
         type: CatalogueEntry_EntryType.CONTENT_MATCHER,
         values: {
-          'content-types': "application/matt",
+          'content-types': "application/foo",
         }));
     return response;
   }
@@ -44,9 +44,8 @@ class PactPluginServer extends PactPluginServiceBase {
         InteractionResponse(
             partName: "request",
             contents: Body(
-                contentType: "application/matt",
-                content:
-                    BytesValue(value: utf8.encode('MATT${requestBody}MATT')))),
+                contentType: "application/foo",
+                content: BytesValue(value: utf8.encode('$requestBody')))),
       ]);
     }
     if (request.contentsConfig.fields.containsKey('response')) {
@@ -57,9 +56,8 @@ class PactPluginServer extends PactPluginServiceBase {
         InteractionResponse(
             partName: "response",
             contents: Body(
-                contentType: "application/matt",
-                content:
-                    BytesValue(value: utf8.encode('MATT${responseBody}MATT')))),
+                contentType: "application/foo",
+                content: BytesValue(value: utf8.encode('$responseBody')))),
       ]);
     }
     return ConfigureInteractionResponse();
@@ -69,21 +67,26 @@ class PactPluginServer extends PactPluginServiceBase {
   Future<CompareContentsResponse> compareContents(
       ServiceCall call, CompareContentsRequest request) async {
     log('Received CompareContentsRequest: $request');
-    var actual = utf8.decode(request.actual.content.writeToBuffer());
-    var expected = utf8.decode(request.expected.content.writeToBuffer());
+    var actual =
+        utf8.decode(request.actual.content.writeToBuffer()).substring(2);
+    var expected =
+        utf8.decode(request.expected.content.writeToBuffer()).substring(2);
     if (actual == expected) {
       return CompareContentsResponse();
     }
+    var actualContent = request.actual.content;
+    var expectedContent = request.expected.content;
     var response = CompareContentsResponse(
-        error: "we had a mismatch",
+        error: "actual does not meet expected",
         results: {
-          "ContentMismatches()": ContentMismatches(mismatches: [
+          "\$": ContentMismatches(mismatches: [
             ContentMismatch(
                 diff: "diff",
-                mismatch: 'mismatch',
-                path: "/path/to/mismatch",
-                actual: request.actual.content,
-                expected: request.expected.content)
+                mismatch:
+                    'expected body $expected is not equal to actual body $actual',
+                path: "\$",
+                actual: actualContent,
+                expected: expectedContent)
           ])
         },
         typeMismatch: ContentTypeMismatch(actual: actual, expected: expected));

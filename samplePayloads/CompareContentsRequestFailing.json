@@ -1,0 +1,14 @@
+{
+  "expected": {
+    "contentType": "application/foo",
+    "content": "aGVsbG8="
+  },
+  "actual": {
+    "contentType": "application/foo",
+    "content": "d29ybGQ="
+  },
+  "pluginConfiguration": {
+    "interactionConfiguration": {},
+    "pactConfiguration": {}
+  }
+}

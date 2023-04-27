@@ -1,10 +1,10 @@
 {
   "manifestVersion": 1,
   "pluginInterfaceVersion": 1,
-  "name": "protobuf",
+  "name": "kotlin-template",
   "version": "0.0.0",
   "executableType": "exec",
-  "entryPoint": "bin/pact-protobuf-plugin",
+  "entryPoint": "build/install/pact-protobuf-plugin/bin/pact-protobuf-plugin",
   "entryPoints": {
     "windows": "bin/pact-protobuf-plugin.bat"
   },

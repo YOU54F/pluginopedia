@@ -3,3 +3,4 @@ log
 dist
 *.log
 vendor
+golang-template

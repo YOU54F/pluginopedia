@@ -2,14 +2,17 @@ TEST?=./...
 .DEFAULT_GOAL := ci
 FFI_VERSION=0.3.15
 # Update this version
-VERSION=0.0.1
+VERSION=0.0.0
 # Update to your project name
-PROJECT=foobar
+PROJECT=golang-template
 
 ci:: deps clean bin test
 
 bin: write_config
-	go build -o build/$(PROJECT)
+	go build -o build/$(PROJECT) && make cp_bin
+
+cp_bin:
+	cp build/$(PROJECT) $(PROJECT)
 
 clean:
 	rm -rf build dist

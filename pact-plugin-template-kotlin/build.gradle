@@ -44,7 +44,7 @@ dependencies {
     implementation 'org.apache.tika:tika-core:1.27'
 
     // You'll need to change the location, if you move your proto
-    protobuf files('../plugin.proto')
+    protobuf files('plugin.proto')
 
     testImplementation "org.codehaus.groovy:groovy:3.0.8"
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
@@ -73,11 +73,11 @@ test {
 }
 
 protobuf {
-    protoc { artifact = "com.google.protobuf:protoc:3.18.1:osx-x86_64" } // enabled for M1 Mac users
-    // protoc { artifact = "com.google.protobuf:protoc:3.18.1" } // Uncomment this on other platforms
+    // protoc { artifact = "com.google.protobuf:protoc:3.18.1:osx-x86_64" } // enabled for M1 Mac users
+    protoc { artifact = "com.google.protobuf:protoc:3.18.1" } // Uncomment this on other platforms
     plugins {
-        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.40.1:osx-x86_64" } // enabled for M1 Mac users
-        // grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.40.1" } // Uncomment this on other platforms
+        // grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.40.1:osx-x86_64" } // enabled for M1 Mac users
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:1.40.1" } // Uncomment this on other platforms
         grpckt { artifact = "io.grpc:protoc-gen-grpc-kotlin:1.1.0:jdk7@jar" }
     }
     generateProtoTasks {

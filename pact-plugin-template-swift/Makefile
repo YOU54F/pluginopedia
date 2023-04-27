@@ -8,7 +8,7 @@ test:
 	swift test
 
 run:
-	.build/arm64-apple-macosx/debug/PactPlugin
+	.build/debug/PactPlugin
 
 bin_copy:
-	mv .build/arm64-apple-macosx/debug/PactPlugin .
+	cp .build/debug/PactPlugin .

@@ -37,11 +37,13 @@ class PactPluginServer
     {
 
         var builder = WebApplication.CreateBuilder();
+        var port = Environment.GetEnvironmentVariable("PORT") is string p && p.Length > 0 ? 
+                    Int32.Parse(p) : 50051;
 
         builder.WebHost.ConfigureKestrel(options =>
         {
             // Setup a HTTP/2 endpoint without TLS.
-            options.ListenLocalhost(5117, o => o.Protocols =
+            options.ListenLocalhost(port, o => o.Protocols =
                 HttpProtocols.Http2);
         });
 
@@ -56,7 +58,7 @@ class PactPluginServer
 
 
         var initMessage = new InitMessage();
-        initMessage.Port = 5117;
+        initMessage.Port = port;
         initMessage.ServerKey = "76bee28c-97b9-47c1-9684-30cb1e273051";
         var serializeOptions = new JsonSerializerOptions
         {

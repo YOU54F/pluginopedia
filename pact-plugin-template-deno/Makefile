@@ -1,6 +1,6 @@
 PLUGIN_VERSION?=$(shell ./script/bump.sh -p "v-" -l)
 TARGET?=aarch64-apple-darwin
-OUT_FILE?=dist/PLATFORMx/aarch64/pactPluginServer
+OUT_FILE?=dist/PLATFORM/aarch64/pactPluginServer
 PLUGIN_NAME=deno-template
 
 update_manifest:

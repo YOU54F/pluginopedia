@@ -17,9 +17,9 @@ public class PactPluginService : PactPlugin.PactPluginBase
     {
         var response = new InitPluginResponse();
         var contentTypes = new Dictionary<string, string>();
-        contentTypes.Add("content-types", "application/matt");
+        contentTypes.Add("content-types", "application/foo");
         var catalogueEntries = new[] { new CatalogueEntry
-                                        { Key = "dotnet-template",
+                                        { Key = "foo",
                                         Type = (CatalogueEntry.Types.EntryType)0,
                                         Values = { contentTypes } } };
         response.Catalogue.Add(catalogueEntries);
@@ -41,11 +41,10 @@ public class PactPluginService : PactPlugin.PactPluginBase
         var interactionResponse = new InteractionResponse();
         if (request.ContentsConfig.Fields.ContainsKey("request"))
         {
-
             interactionResponse.PartName = "request";
             var interactionRequestContent = new Body();
-            interactionRequestContent.ContentType = "application/matt";
-            interactionRequestContent.Content = ByteString.CopyFromUtf8("MATThelloMATT");
+            interactionRequestContent.ContentType = "application/foo";
+            interactionRequestContent.Content = ByteString.CopyFromUtf8("hello");
             interactionResponse.Contents = interactionRequestContent;
             configureInteractionResponse.Interaction.Add(interactionResponse);
             return Task.FromResult(configureInteractionResponse);
@@ -56,8 +55,8 @@ public class PactPluginService : PactPlugin.PactPluginBase
 
             interactionResponse.PartName = "response";
             var interactionResponseContent = new Body();
-            interactionResponseContent.ContentType = "application/matt";
-            interactionResponseContent.Content = ByteString.CopyFromUtf8("MATTworldMATT");
+            interactionResponseContent.ContentType = "application/foo";
+            interactionResponseContent.Content = ByteString.CopyFromUtf8("world");
             interactionResponse.Contents = interactionResponseContent;
             configureInteractionResponse.Interaction.Add(interactionResponse);
             return Task.FromResult(configureInteractionResponse);
@@ -76,10 +75,18 @@ public class PactPluginService : PactPlugin.PactPluginBase
             var contentMismatch = new ContentMismatch();
             contentMismatch.Actual = actual;
             contentMismatch.Expected = expected;
+            contentMismatch.Diff = "diff";
+            contentMismatch.Path = "$";
+            contentMismatch.Mismatch = $"expected body {expected.ToStringUtf8()} is not equal to actual body {actual.ToStringUtf8()}";
             contentMismatches.Mismatches.Add(contentMismatch);
             var contentMismatchDict = new Dictionary<string, ContentMismatches>();
-            contentMismatchDict.Add("content-types", contentMismatches);
+            contentMismatchDict.Add("$", contentMismatches);
             response.Results.Add(contentMismatchDict);
+            response.Error = "actual does not meet expected";
+            var contentTypeMismatch = new ContentTypeMismatch();
+            contentTypeMismatch.Actual = actual.ToStringUtf8();
+            contentTypeMismatch.Expected = expected.ToStringUtf8();
+            response.TypeMismatch = contentTypeMismatch;
         }
 
 

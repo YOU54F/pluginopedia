@@ -1,6 +1,6 @@
 {
   "consumer": {
-    "name": "myconsumer"
+    "name": "myconsumer-kotlin-template"
   },
   "interactions": [
     {
@@ -58,8 +58,8 @@
     "plugins": [
       {
         "configuration": {},
-        "name": "foobar",
-        "version": "0.0.1"
+        "name": "kotlin-template",
+        "version": "0.0.0"
       }
     ]
   },

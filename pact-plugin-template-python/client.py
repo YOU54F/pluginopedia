@@ -9,7 +9,7 @@ class PactPluginClient(object):
     """
 
     def __init__(self):
-        self.host = 'localhost'
+        self.host = '[::1]'
         self.server_port = 50051
 
         # instantiate a channel

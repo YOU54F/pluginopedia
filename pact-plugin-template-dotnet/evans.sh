@@ -6,7 +6,7 @@
 
 # Init Plugin Request
 
-echo '{ "implementation": "pact-rust", "version":"1.2.3" }' | evans cli call io.pact.plugin.PactPlugin.InitPlugin --proto ./Protos/plugin.proto --port 5117
+echo '{ "implementation": "pact-rust", "version":"1.2.3" }' | evans cli call io.pact.plugin.PactPlugin.InitPlugin --proto ./Protos/plugin.proto --port 50051
 
 # {
 #   "catalogue": [
@@ -14,7 +14,7 @@ echo '{ "implementation": "pact-rust", "version":"1.2.3" }' | evans cli call io.
 #       "key": "dotnet-template",
 #       "type": "TRANSPORT",
 #       "values": {
-#         "content-types": "application/matt"
+#         "content-types": "application/foo"
 #       }
 #     }
 #   ]

@@ -12,12 +12,14 @@ import { ConfigureInteractionResponse } from './proto/io/pact/plugin/ConfigureIn
 import { TextEncoder } from 'util';
 import { Catalogue } from './proto/io/pact/plugin/Catalogue';
 import { Empty } from './proto/google/protobuf/Empty';
+import { CompareContentsRequest } from './proto/io/pact/plugin/CompareContentsRequest';
+import { CompareContentsResponse } from './proto/io/pact/plugin/CompareContentsResponse';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const randomUUID = require('crypto').randomUUID;
 
 // import { ServerMessage } from './proto/example_package/ServerMessage';
 
-const host = '0.0.0.0:9090';
+
 // @ts-ignore
 const pactPluginServer: PactPluginHandlers = {
   initPlugin(
@@ -32,9 +34,7 @@ const pactPluginServer: PactPluginHandlers = {
         {
           type: _io_pact_plugin_CatalogueEntry_EntryType.CONTENT_MATCHER,
           values: { 'content-types': 'application/foo' },
-          key: 'matt',
-          // values: { 'content-types': 'text/plain;application/matt' },
-          // key: 'matt',
+          key: 'foo',
         },
       ],
     });
@@ -55,22 +55,80 @@ const pactPluginServer: PactPluginHandlers = {
     >,
     callback: grpc.sendUnaryData<ConfigureInteractionResponse>
   ) {
-    if (call.request) {
-      console.log(`(server) Got configureInteraction message:`, call.request);
+      // for some reason, logging out here causes the plugin pact tests to fail, 
+      // so print statements have been removed.
+    // if (call.request) {
+    //   console.log(`(server) Got configureInteraction message:`, call.request);
+    // }
+
+    const contentsConfig = JSON.parse(
+      JSON.stringify(call.request.contentsConfig?.fields)
+    );
+
+
+    const interactions: ConfigureInteractionResponse['interaction'] = [];
+
+    if (contentsConfig.request) {
+      // console.log(contentsConfig.request)
+      interactions.push({
+        contents: {
+          content: { value: new TextEncoder().encode(contentsConfig.request.structValue.fields.body.stringValue) },
+          contentType: 'application/foo',
+        },
+        partName: 'request',
+      });
+    }
+    if (contentsConfig.response) {
+      // console.log(contentsConfig.response)
+      interactions.push({
+        contents: {
+          content: { value: new TextEncoder().encode(contentsConfig.response.structValue.fields.body.stringValue) },
+          contentType: 'application/foo',
+        },
+        partName: 'response',
+      });
     }
 
     callback(null, {
-      interaction: [
-        {
-          contents: {
-            content: { value: new TextEncoder().encode('hello') },
-            contentType: 'application/matt',
-          },
-          partName: 'request',
-          // messageMetadata: { fields: { stringValue: "foo" } }
-        },
-      ],
+      interaction: interactions,
     });
+  },
+  compareContents(
+    call: grpc.ServerUnaryCall<CompareContentsRequest, CompareContentsResponse>,
+    callback: grpc.sendUnaryData<CompareContentsResponse>
+  ) {
+    if (call.request) {
+      console.log(`(server) Got CompareContentsRequest message:`, call.request);
+    }
+
+    const actual = call.request.actual?.content;
+    const expected = call.request.expected?.content;
+
+    if (actual?.value?.toString() !== expected?.value?.toString()) {
+      return callback(null, {
+        error: 'actual does not meet expected',
+        results: {
+          $: {
+            mismatches: [
+              {
+                path: '$',
+                actual,
+                expected,
+                diff: "diff",
+                mismatch: `expected body ${expected?.value} is not equal to actual body ${actual?.value}`,
+              },
+            ],
+
+          },
+        },
+        typeMismatch:{
+          actual:actual?.value as string,
+          expected: expected?.value as string,
+        }
+      });
+    } else {
+      return callback(null, {});
+    }
   },
 };
 
@@ -87,7 +145,8 @@ function getServer(): grpc.Server {
 if (require.main === module) {
   const server = getServer();
   const serverKey = randomUUID();
-
+  const port = process.env.PORT ? Number(process.env.PORT) : 50051
+  const host = ['[::1]',port].join(":");
   server.bindAsync(
     host,
     grpc.ServerCredentials.createInsecure(),
